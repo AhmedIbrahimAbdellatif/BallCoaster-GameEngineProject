@@ -1,0 +1,8 @@
+./bin/GAME_APPLICATION -f=2 -c="config/sampler-test/test-0.jsonc"
+./bin/GAME_APPLICATION -f=2 -c="config/sampler-test/test-1.jsonc"
+./bin/GAME_APPLICATION -f=2 -c="config/sampler-test/test-2.jsonc"
+./bin/GAME_APPLICATION -f=2 -c="config/sampler-test/test-3.jsonc"
+./bin/GAME_APPLICATION -f=2 -c="config/sampler-test/test-4.jsonc"
+./bin/GAME_APPLICATION -f=2 -c="config/sampler-test/test-5.jsonc"
+./bin/GAME_APPLICATION -f=2 -c="config/sampler-test/test-6.jsonc"
+./bin/GAME_APPLICATION -f=2 -c="config/sampler-test/test-7.jsonc"

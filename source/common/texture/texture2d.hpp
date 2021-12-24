@@ -13,7 +13,7 @@ namespace our {
         Texture2D() {
             //TODO: Complete this function
             glGenTextures(1, &name);
-            glActiveTexture(GL_TEXTURE_2D);
+            glActiveTexture(GL_TEXTURE0);
         };
 
         // This deconstructor deletes the underlying OpenGL texture

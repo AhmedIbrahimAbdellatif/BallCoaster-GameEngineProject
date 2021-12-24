@@ -43,11 +43,11 @@ namespace our {
     // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex" 
     void TexturedMaterial::setup() const {
         //TODO: Write this function
-        Material::setup();
+        TintedMaterial::setup();
         shader->set("alphaThreshold", alphaThreshold);
         texture->bind();
-        sampler->bind(GL_TEXTURE0);
-        glUniform1i(shader->getUniformLocation("tex"), 0);
+        sampler->bind(0);
+        glUniform1i(shader->getUniformLocation("tex"), 0); // zero --> finding active unit (to be checked)
     }
 
     // This function read the material data from a json object

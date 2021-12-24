@@ -22,33 +22,9 @@ namespace our {
     // HINT: to convert euler angles to a rotation matrix, you can use glm::yawPitchRoll
     glm::mat4 Transform::toMat4() const {
         //TODO: Write this function
-
-        glm::mat4 scaleMat = glm::mat4(1.0f);
-        scaleMat[0][0] = scale[0];
-        scaleMat[1][1] = scale[1];
-        scaleMat[2][2] = scale[2];
-        std::cout << "scale:" << std::endl;
-        printMat4(scaleMat);
-        std::cout << std::endl;
-
-        glm::mat4 rotationMat = glm::yawPitchRoll(rotation.y, rotation.x, rotation.z); 
-        std::cout << "rotation:" << std::endl;
-        printMat4(rotationMat);
-        std::cout << std::endl;
-
-        glm::mat4 translationMat = glm::mat4(1.0f);
-        translationMat[0][3] = position[0];
-        translationMat[1][3] = position[1];
-        translationMat[2][3] = position[2];
-        std::cout << "translation:" << std::endl;
-        printMat4(translationMat);
-        std::cout << std::endl;
-
-
-        glm::mat4 transformationMat = translationMat * rotationMat * scaleMat;
-        std::cout << "total:" << std::endl;
-        printMat4(transformationMat);
-        std::cout << std::endl;
+        glm::mat4 transformationMat = glm::translate(glm::mat4(1.0f), position) *
+            glm::yawPitchRoll(rotation.y, rotation.x, rotation.z) *
+            glm::scale(glm::mat4(1.0f), scale);
 
         return  transformationMat;
     }

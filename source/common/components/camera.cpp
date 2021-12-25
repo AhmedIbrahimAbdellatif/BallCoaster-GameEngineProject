@@ -5,6 +5,18 @@
 #include <iostream>
 
 namespace our {
+    void printMat4_2(glm::mat4 mat)
+    {
+        for (int i = 0;i < 4;++i)
+        {
+            for (int j = 0;j < 4;++j)
+            {
+                std::cout << mat[i][j] << " ";
+            }
+            std::cout << "\n";
+        }
+    }
+
     // Reads camera parameters from the given json object
     void CameraComponent::deserialize(const nlohmann::json& data){
         if(!data.is_object()) return;
@@ -35,15 +47,18 @@ namespace our {
         // - the eye position which is the point (0,0,0) but after being transformed by M
         // - the center position which is the point (0,0,-1) but after being transformed by M
         // - the up direction which is the vector (0,1,0) but after being transformed by M
-        glm::vec4 eye(0, 0 , 0, 0);
-        glm::vec4 center(0, 0 , -1, 0);
-        glm::vec4 up(0, 1 , 0, 0);
+        glm::vec4 eye(0.0, 0.0, 0.0, 1.0); // position is a point
+        glm::vec4 center(0.0, 0.0 , -1.0, 1.0); // orientation // point
+        glm::vec4 up(0.0, 1.0, 0.0, 0.0); // up is a vector
 
-        eye = M * eye;
-        center = M * center;
-        up = M * up;
+        glm::vec4 eye_new = glm::vec4(M * eye);
+        glm::vec4 center_new = glm::vec4(M * center);
+        glm::vec4 up_new = glm::vec4(M * up);
 
-        return glm::lookAt(glm::vec3(eye.x, eye.y, eye.z), glm::vec3(center.x, center.y, center.z), glm::vec3(up.x, up.y, up.z));
+        glm::mat4 veiwMat = glm::lookAt(glm::vec3(eye_new.x, eye_new.y, eye_new.z), glm::vec3(center_new.x, center_new.y, center_new.z), 
+                                        glm::vec3(up_new.x, up_new.y, up_new.z));
+
+        return veiwMat;
     }
 
     // Creates and returns the camera projection matrix
@@ -55,14 +70,14 @@ namespace our {
         // Left and Right are the same but after being multiplied by the aspect ratio
         // For the perspective camera, you can use glm::perspective
 
-        float aspectRatio = viewportSize.x / viewportSize.y;
+        float aspectRatio = (float)viewportSize.x / viewportSize.y;
         if (cameraType == our::CameraType::PERSPECTIVE)
         {            
             return glm::perspective<float>(fovY, aspectRatio, near, far);
         }
         else if (cameraType == our::CameraType::ORTHOGRAPHIC)
         {
-            return glm::ortho(-aspectRatio, aspectRatio, -orthoHeight / 2, orthoHeight / 2, near, far);
+            return glm::ortho(-orthoHeight*aspectRatio/2, orthoHeight*aspectRatio/2, -orthoHeight / 2, orthoHeight / 2, near, far);
         }
     }
 }

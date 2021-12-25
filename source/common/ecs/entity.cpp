@@ -16,7 +16,7 @@ namespace our {
         {
             return parent->getLocalToWorldMatrix() * localTransform.toMat4();
         }
-        else 
+        else
         {
             return localTransform.toMat4();
         }

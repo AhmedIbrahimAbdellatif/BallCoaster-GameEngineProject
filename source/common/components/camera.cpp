@@ -2,6 +2,7 @@
 #include "../ecs/entity.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp> 
+#include <iostream>
 
 namespace our {
     // Reads camera parameters from the given json object
@@ -34,8 +35,15 @@ namespace our {
         // - the eye position which is the point (0,0,0) but after being transformed by M
         // - the center position which is the point (0,0,-1) but after being transformed by M
         // - the up direction which is the vector (0,1,0) but after being transformed by M
-        // then you can use glm::lookAt
-        return glm::mat4(1.0f);
+        glm::vec4 eye(0, 0 , 0, 0);
+        glm::vec4 center(0, 0 , -1, 0);
+        glm::vec4 up(0, 1 , 0, 0);
+
+        eye = M * eye;
+        center = M * center;
+        up = M * up;
+
+        return glm::lookAt(glm::vec3(eye.x, eye.y, eye.z), glm::vec3(center.x, center.y, center.z), glm::vec3(up.x, up.y, up.z));
     }
 
     // Creates and returns the camera projection matrix
@@ -46,6 +54,15 @@ namespace our {
         // It takes left, right, bottom, top. Bottom is -orthoHeight/2 and Top is orthoHeight/2.
         // Left and Right are the same but after being multiplied by the aspect ratio
         // For the perspective camera, you can use glm::perspective
-        return glm::mat4(1.0f);
+
+        float aspectRatio = viewportSize.x / viewportSize.y;
+        if (cameraType == our::CameraType::PERSPECTIVE)
+        {            
+            return glm::perspective<float>(fovY, aspectRatio, near, far);
+        }
+        else if (cameraType == our::CameraType::ORTHOGRAPHIC)
+        {
+            return glm::ortho(-aspectRatio, aspectRatio, -orthoHeight / 2, orthoHeight / 2, near, far);
+        }
     }
 }

@@ -53,6 +53,20 @@ namespace our {
             glColorMask(colorMask.r, colorMask.g, colorMask.b, colorMask.a);
         }
 
+        void configureFaceCulling() const
+        {
+            if (faceCulling.enabled)
+            {
+                glEnable(GL_CULL_FACE);
+                glCullFace(faceCulling.culledFace);
+                glFrontFace(faceCulling.frontFace);
+            }
+            else
+            {
+                glDisable(GL_CULL_FACE);
+            }
+        }
+
         void configureBlending() const
         {
             if (blending.enabled)
@@ -79,20 +93,6 @@ namespace our {
             else
             {
                 glDisable(GL_DEPTH_TEST);
-            }
-        }
-
-        void configureFaceCulling() const
-        {
-            if (faceCulling.enabled)
-            {
-                glEnable(GL_CULL_FACE);
-                glCullFace(faceCulling.culledFace);
-                glFrontFace(faceCulling.frontFace);
-            }
-            else
-            {
-                glDisable(GL_CULL_FACE);
             }
         }
 

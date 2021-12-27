@@ -12,6 +12,8 @@ namespace our {
         // This constructor creates an OpenGL texture and saves its object name in the member variable "name" 
         Texture2D() {
             //TODO: Complete this function
+
+            // generate texture object and select active texture unit
             glGenTextures(1, &name);
             glActiveTexture(GL_TEXTURE0);
         };

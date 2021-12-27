@@ -1,5 +1,7 @@
 #include "material.hpp"
 
+#define FIRST_TEXTURE_UNIT 0
+
 #include "../asset-loader.hpp"
 #include "deserialize-utils.hpp"
 
@@ -27,7 +29,7 @@ namespace our {
     // set the "tint" uniform to the value in the member variable tint 
     void TintedMaterial::setup() const {
         //TODO: Write this function
-        Material::setup();
+        Material::setup(); // tinted material is the child of material class
         shader->set("tint", tint);
     }
 
@@ -43,11 +45,11 @@ namespace our {
     // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex" 
     void TexturedMaterial::setup() const {
         //TODO: Write this function
-        TintedMaterial::setup();
+        TintedMaterial::setup(); // textured material is the child of tinted material class
         shader->set("alphaThreshold", alphaThreshold);
         texture->bind();
-        sampler->bind(0);
-        glUniform1i(shader->getUniformLocation("tex"), 0); // zero --> finding active unit (to be checked)
+        sampler->bind(FIRST_TEXTURE_UNIT);
+        shader->set("tex", FIRST_TEXTURE_UNIT);
     }
 
     // This function read the material data from a json object

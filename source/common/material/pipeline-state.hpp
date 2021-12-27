@@ -42,33 +42,19 @@ namespace our {
         // For example, if faceCulling.enabled is true, you should call glEnable(GL_CULL_FACE), otherwise, you should call glDisable(GL_CULL_FACE)
         void setup() const {
             //TODO: Write this function
+            configureColorComponents();
+            configureFaceCulling();
+            configureDepthTesting();
+            configureBlending();
+        }
 
-            glDepthMask(depthMask);
+        void configureColorComponents() const
+        {
             glColorMask(colorMask.r, colorMask.g, colorMask.b, colorMask.a);
+        }
 
-            if (faceCulling.enabled)
-            {
-                glEnable(GL_CULL_FACE);
-                glCullFace(faceCulling.culledFace);
-                glFrontFace(faceCulling.frontFace);
-            }
-            else
-            {
-                glDisable(GL_CULL_FACE);
-            }
-
-
-            if (depthTesting.enabled)
-            {
-                glEnable(GL_DEPTH_TEST);
-                glDepthFunc(depthTesting.function);
-            }
-            else
-            {
-                glDisable(GL_DEPTH_TEST);
-            }
-
-
+        void configureBlending() const
+        {
             if (blending.enabled)
             {
                 glEnable(GL_BLEND);
@@ -79,6 +65,34 @@ namespace our {
             else
             {
                 glDisable(GL_BLEND);
+            }
+        }
+
+        void configureDepthTesting() const
+        {
+            if (depthTesting.enabled)
+            {
+                glEnable(GL_DEPTH_TEST);
+                glDepthMask(depthMask); // enable or disable writing to depth mask
+                glDepthFunc(depthTesting.function);
+            }
+            else
+            {
+                glDisable(GL_DEPTH_TEST);
+            }
+        }
+
+        void configureFaceCulling() const
+        {
+            if (faceCulling.enabled)
+            {
+                glEnable(GL_CULL_FACE);
+                glCullFace(faceCulling.culledFace);
+                glFrontFace(faceCulling.frontFace);
+            }
+            else
+            {
+                glDisable(GL_CULL_FACE);
             }
         }
 

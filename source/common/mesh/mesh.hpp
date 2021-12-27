@@ -86,7 +86,7 @@ namespace our
         {
             //TODO: Write this function
             glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, UNBIND);
+            glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, (void*) NO_OFFSET);
             glBindVertexArray(0);
         }
 

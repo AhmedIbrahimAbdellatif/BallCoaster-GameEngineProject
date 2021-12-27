@@ -74,10 +74,9 @@ namespace our
                 // HINT: the following return should return true, "first" should be drawn before "second". 
                 glm::vec4 firstCoord(glm::vec4(first.center, 1.0));
                 glm::vec4 secondCoord(glm::vec4(second.center, 1.0));
-                glm::vec4 pointsVec(secondCoord - firstCoord);
-                //pointsVec.w = 0;
+                glm::vec4 firstSecondVec(secondCoord - firstCoord);
 
-                return glm::dot(pointsVec, glm::vec4(cameraForward, 0)) < 0;
+                return glm::dot(firstSecondVec, glm::vec4(cameraForward, 0)) < 0;
             });
 
             //TODO: Get the camera ViewProjection matrix and store it in VP
@@ -100,15 +99,13 @@ namespace our
 
             //TODO: Draw all the opaque commands followed by all the transparent commands
             // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
-            for (auto command : opaqueCommands)
-            {
-                glm::mat4 MVP(VP * command.localToWorld);
-                command.material->setup();
-                command.material->shader->set("transform", MVP);
-                command.mesh->draw();
-            }
-            
-            for (auto command : transparentCommands)
+            drawCommands(opaqueCommands, VP);
+            drawCommands(transparentCommands, VP);
+        }
+
+        void drawCommands(std::vector<RenderCommand>& commands, glm::mat4& VP)
+        {
+            for (auto command : commands)
             {
                 glm::mat4 MVP(VP * command.localToWorld);
                 command.material->setup();
@@ -116,7 +113,6 @@ namespace our
                 command.mesh->draw();
             }
         };
-
 
     };
 

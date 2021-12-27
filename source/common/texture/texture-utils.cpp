@@ -12,7 +12,7 @@ glm::ivec2 our::texture_utils::loadImage(Texture2D& texture, const char *filenam
     int channels;
     unsigned char* texture_data;
     
-    loadTextureData(texture_data, filename, size, channels);
+    loadTextureData(texture_data, filename, size, channels); // this function loads the data to the pointer texture_data
     if(texture_data == nullptr){
         std::cerr << "Failed to load image: " << filename << std::endl;
         return {0, 0};

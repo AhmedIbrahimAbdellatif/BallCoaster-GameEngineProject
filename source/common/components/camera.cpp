@@ -47,24 +47,23 @@ namespace our {
         // - the eye position which is the point (0,0,0) but after being transformed by M
         // - the center position which is the point (0,0,-1) but after being transformed by M
         // - the up direction which is the vector (0,1,0) but after being transformed by M
-        glm::vec4 eye(0.0, 0.0, 0.0, 1.0); // position is a point
-        glm::vec4 center(0.0, 0.0 , -1.0, 1.0); // orientation // point
-        glm::vec4 up(0.0, 1.0, 0.0, 0.0); // up is a vector
+        glm::vec4 eye_cam(0.0, 0.0, 0.0, 1.0); // position is a point
+        glm::vec4 center_cam(0.0, 0.0 , -1.0, 1.0); // orientation // point
+        glm::vec4 up_cam(0.0, 1.0, 0.0, 0.0); // up is a vector
 
-        glm::vec4 eye_new = glm::vec4(M * eye);
-        glm::vec4 center_new = glm::vec4(M * center);
-        glm::vec4 up_new = glm::vec4(M * up);
+        glm::vec3 eye_world = extract3D(glm::vec4(M * eye_cam));
+        glm::vec3 center_world = extract3D(glm::vec4(M * center_cam));
+        glm::vec3 up_world = extract3D(glm::vec4(M * up_cam));
 
-        glm::mat4 veiwMat = glm::lookAt(glm::vec3(eye_new.x, eye_new.y, eye_new.z), glm::vec3(center_new.x, center_new.y, center_new.z), 
-                                        glm::vec3(up_new.x, up_new.y, up_new.z));
+        glm::mat4 viewMat = glm::lookAt(eye_world, center_world, up_world);
 
-        return veiwMat;
+        return viewMat;
     }
 
     // Creates and returns the camera projection matrix
     // "viewportSize" is used to compute the aspect ratio
     glm::mat4 CameraComponent::getProjectionMatrix(glm::ivec2 viewportSize) const {
-        //TODO: Wrtie this function
+        //TODO: Write this function
         // NOTE: The function glm::ortho can be used to create the orthographic projection matrix
         // It takes left, right, bottom, top. Bottom is -orthoHeight/2 and Top is orthoHeight/2.
         // Left and Right are the same but after being multiplied by the aspect ratio
@@ -77,6 +76,7 @@ namespace our {
         }
         else if (cameraType == our::CameraType::ORTHOGRAPHIC)
         {
+            // left, right, bottom, top, near, far
             return glm::ortho(-orthoHeight*aspectRatio/2, orthoHeight*aspectRatio/2, -orthoHeight / 2, orthoHeight / 2, near, far);
         }
     }

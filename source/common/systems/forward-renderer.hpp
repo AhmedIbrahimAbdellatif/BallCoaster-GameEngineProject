@@ -66,28 +66,53 @@ namespace our
 
             //TODO: Modify the following line such that "cameraForward" contains a vector pointing the camera forward direction
             // HINT: See how you wrote the CameraComponent::getViewMatrix, it should help you solve this one
-            glm::vec3 cameraForward = glm::vec3(0.0f);
+            glm::vec4 cameraForwardVec4 = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, 0.0, -1.0, 0.0);
+            glm::vec3 cameraForward = glm::vec3(cameraForwardVec4.x, cameraForwardVec4.y, cameraForwardVec4.z);
+
             std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand& first, const RenderCommand& second){
                 //TODO: Finish this function
-                // HINT: the following return should return true "first" should be drawn before "second". 
-                return false;
+                // HINT: the following return should return true, "first" should be drawn before "second". 
+                glm::vec4 firstCoord(glm::vec4(first.center, 1.0));
+                glm::vec4 secondCoord(glm::vec4(second.center, 1.0));
+                glm::vec4 firstSecondVec(secondCoord - firstCoord);
+
+                return glm::dot(firstSecondVec, glm::vec4(cameraForward, 0)) < 0;
             });
 
             //TODO: Get the camera ViewProjection matrix and store it in VP
-            
+            glm::mat4 VP = camera->getProjectionMatrix(viewportSize)* camera->getViewMatrix();
+
             //TODO: Set the OpenGL viewport using viewportStart and viewportSize
-            
+            glViewport(viewportStart.x, viewportStart.y, viewportSize.x, viewportSize.y);
+
             //TODO: Set the clear color to black and the clear depth to 1
-            
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClearDepth(1.0f);
+
             //TODO: Set the color mask to true and the depth mask to true (to ensure the glClear will affect the framebuffer)
-            
+            glColorMask(true, true, true, true);
+            glDepthMask(true);
+
             //TODO: Clear the color and depth buffers
-            
+            glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_DEPTH_BUFFER_BIT);
+
             //TODO: Draw all the opaque commands followed by all the transparent commands
             // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
-            
-        };
+            drawCommands(opaqueCommands, VP);
+            drawCommands(transparentCommands, VP);
+        }
 
+        void drawCommands(std::vector<RenderCommand>& commands, glm::mat4& VP)
+        {
+            for (auto command : commands)
+            {
+                glm::mat4 MVP(VP * command.localToWorld);
+                command.material->setup();
+                command.material->shader->set("transform", MVP);
+                command.mesh->draw();
+            }
+        };
 
     };
 

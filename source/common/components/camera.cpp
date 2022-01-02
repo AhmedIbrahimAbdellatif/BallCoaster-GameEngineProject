@@ -2,8 +2,21 @@
 #include "../ecs/entity.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp> 
+#include <iostream>
 
 namespace our {
+    void printMat4_2(glm::mat4 mat)
+    {
+        for (int i = 0;i < 4;++i)
+        {
+            for (int j = 0;j < 4;++j)
+            {
+                std::cout << mat[i][j] << " ";
+            }
+            std::cout << "\n";
+        }
+    }
+
     // Reads camera parameters from the given json object
     void CameraComponent::deserialize(const nlohmann::json& data){
         if(!data.is_object()) return;
@@ -34,18 +47,37 @@ namespace our {
         // - the eye position which is the point (0,0,0) but after being transformed by M
         // - the center position which is the point (0,0,-1) but after being transformed by M
         // - the up direction which is the vector (0,1,0) but after being transformed by M
-        // then you can use glm::lookAt
-        return glm::mat4(1.0f);
+        glm::vec4 eye_cam(0.0, 0.0, 0.0, 1.0); // position is a point
+        glm::vec4 center_cam(0.0, 0.0 , -1.0, 1.0); // orientation // point
+        glm::vec4 up_cam(0.0, 1.0, 0.0, 0.0); // up is a vector
+
+        glm::vec3 eye_world = extract3D(glm::vec4(M * eye_cam));
+        glm::vec3 center_world = extract3D(glm::vec4(M * center_cam));
+        glm::vec3 up_world = extract3D(glm::vec4(M * up_cam));
+
+        glm::mat4 viewMat = glm::lookAt(eye_world, center_world, up_world);
+
+        return viewMat;
     }
 
     // Creates and returns the camera projection matrix
     // "viewportSize" is used to compute the aspect ratio
     glm::mat4 CameraComponent::getProjectionMatrix(glm::ivec2 viewportSize) const {
-        //TODO: Wrtie this function
+        //TODO: Write this function
         // NOTE: The function glm::ortho can be used to create the orthographic projection matrix
         // It takes left, right, bottom, top. Bottom is -orthoHeight/2 and Top is orthoHeight/2.
         // Left and Right are the same but after being multiplied by the aspect ratio
         // For the perspective camera, you can use glm::perspective
-        return glm::mat4(1.0f);
+
+        float aspectRatio = (float)viewportSize.x / viewportSize.y;
+        if (cameraType == our::CameraType::PERSPECTIVE)
+        {            
+            return glm::perspective<float>(fovY, aspectRatio, near, far);
+        }
+        else if (cameraType == our::CameraType::ORTHOGRAPHIC)
+        {
+            // left, right, bottom, top, near, far
+            return glm::ortho(-orthoHeight*aspectRatio/2, orthoHeight*aspectRatio/2, -orthoHeight / 2, orthoHeight / 2, near, far);
+        }
     }
 }

@@ -1,6 +1,8 @@
 #include "texture-utils.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
+#define BASE_IMAGE_LEVEL 0
+#define ZERO_BORDER 0
 #include <stb/stb_image.h>
 
 #include <iostream>
@@ -8,6 +10,33 @@
 glm::ivec2 our::texture_utils::loadImage(Texture2D& texture, const char *filename, bool generate_mipmap) {
     glm::ivec2 size;
     int channels;
+    unsigned char* texture_data;
+    
+    loadTextureData(texture_data, filename, size, channels); // this function loads the data to the pointer texture_data
+    if(texture_data == nullptr){
+        std::cerr << "Failed to load image: " << filename << std::endl;
+        return {0, 0};
+    }
+
+    //Bind the texture such that we upload the image data to its storage
+    //TODO: Finish this function
+    //HINT: The steps should be as follows: bind the texture, send the pixel data to the GPU, then generate the mipmap (if requested).
+    texture.bind();
+    glTexImage2D(GL_TEXTURE_2D, BASE_IMAGE_LEVEL, GL_RGBA, size.x, size.y, ZERO_BORDER, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
+    if (generate_mipmap == true)
+    {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    
+    // clearing up before return
+    stbi_image_free(texture_data); //Free image data after uploading to GPU
+    texture.unbind();
+    
+    return size;
+}
+
+void our::texture_utils::loadTextureData(unsigned char*& texture_data, const char* filename, glm::ivec2& size, int& channels)
+{
     //Since OpenGL puts the texture origin at the bottom left while images typically has the origin at the top left,
     //We need to till stb to flip images vertically after loading them
     stbi_set_flip_vertically_on_load(true);
@@ -19,15 +48,5 @@ glm::ivec2 our::texture_utils::loadImage(Texture2D& texture, const char *filenam
     //- 3: RGB
     //- 4: RGB and Alpha (RGBA)
     //Note: channels (the 4th argument) always returns the original number of channels in the file
-    unsigned char* data = stbi_load(filename, &size.x, &size.y, &channels, 4);
-    if(data == nullptr){
-        std::cerr << "Failed to load image: " << filename << std::endl;
-        return {0, 0};
-    }
-    //Bind the texture such that we upload the image data to its storage
-    //TODO: Finish this function
-    //HINT: The steps should be as follows: bind the texture, send the pixel data to the GPU, then generate the mipmap (if requested).
-    
-    stbi_image_free(data); //Free image data after uploading to GPU
-    return size;
+    texture_data = stbi_load(filename, &size.x, &size.y, &channels, 4);
 }

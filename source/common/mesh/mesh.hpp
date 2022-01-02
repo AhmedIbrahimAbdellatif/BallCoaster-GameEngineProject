@@ -11,6 +11,10 @@ namespace our
 #define ATTRIB_LOC_COLOR 1
 #define ATTRIB_LOC_TEXCOORD 2
 #define ATTRIB_LOC_NORMAL 3
+#define NOT_NORMALIZED GL_FALSE
+#define NORMALIZED  GL_TRUE
+#define NO_OFFSET 0
+#define UNBIND 0
 
     class Mesh
     {
@@ -20,6 +24,7 @@ namespace our
         unsigned int VAO;
         // We need to remember the number of elements that will be draw by glDrawElements
         GLsizei elementCount;
+        GLsizei vertexCount;
 
     public:
         // The constructor takes two vectors:
@@ -31,12 +36,13 @@ namespace our
         // a vertex array object to define how to read the vertex & element buffer during rendering
         Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &elements)
         {
-            //TODO (DONE): Write this function
+            //TODO: Write this function
             // remember to store the number of elements in "elementCount" since you will need it for drawing
             // For the attribute locations, use the constants defined above: ATTRIB_LOC_POSITION, ATTRIB_LOC_COLOR, etc
             elementCount = elements.size();
-            // std::cout << elements.size() << std::endl;
+            vertexCount = vertices.size();
 
+            // Generating, binding and loading data for all needed buffers
             glGenVertexArrays(1, &VAO);
             glGenBuffers(1, &VBO);
             glGenBuffers(1, &EBO);
@@ -44,27 +50,35 @@ namespace our
             glBindVertexArray(VAO);
 
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
-            glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(unsigned int), elements.data(), GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, elementCount * sizeof(unsigned int), elements.data(), GL_STATIC_DRAW);
 
-            //POSITIONS
-            glVertexAttribPointer(ATTRIB_LOC_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)0);
+            // Positions
+            glVertexAttribPointer(ATTRIB_LOC_POSITION, 3, GL_FLOAT, NOT_NORMALIZED, sizeof(Vertex), (void *)NO_OFFSET);
             glEnableVertexAttribArray(ATTRIB_LOC_POSITION);
-            //COLORS
-            glVertexAttribPointer(ATTRIB_LOC_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void *)(3 * sizeof(float)));
+            unsigned long long locationOffset = 3 * sizeof(float);
+
+            // Colors
+            glVertexAttribPointer(ATTRIB_LOC_COLOR, 4, GL_UNSIGNED_BYTE, NORMALIZED, sizeof(Vertex), (void *)locationOffset);
             glEnableVertexAttribArray(ATTRIB_LOC_COLOR);
-            //TEXTURES
-            glVertexAttribPointer(ATTRIB_LOC_TEXCOORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)(3 * sizeof(float) + 4 * sizeof(GLubyte)));
+            unsigned long long colorOffset = 4 * sizeof(GLubyte);
+
+            // Textures
+            glVertexAttribPointer(ATTRIB_LOC_TEXCOORD, 2, GL_FLOAT, NOT_NORMALIZED, sizeof(Vertex), (void *)(locationOffset + colorOffset));
             glEnableVertexAttribArray(ATTRIB_LOC_TEXCOORD);
-            //NORMALS
-            glVertexAttribPointer(ATTRIB_LOC_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(float) + 4 * sizeof(GLubyte)));
+            unsigned long long textureOffset = 2 * sizeof(float);
+
+
+            // Normals
+            glVertexAttribPointer(ATTRIB_LOC_NORMAL, 3, GL_FLOAT, NOT_NORMALIZED, sizeof(Vertex), (void *)(locationOffset + colorOffset + textureOffset));
             glEnableVertexAttribArray(ATTRIB_LOC_NORMAL);
 
-            glBindVertexArray(0);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            // Unbinding all buffers
+            glBindVertexArray(UNBIND);
+            glBindBuffer(GL_ARRAY_BUFFER, UNBIND);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, UNBIND);
         }
 
         // this function should render the mesh
@@ -72,7 +86,7 @@ namespace our
         {
             //TODO: Write this function
             glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, (void*) NO_OFFSET);
             glBindVertexArray(0);
         }
 

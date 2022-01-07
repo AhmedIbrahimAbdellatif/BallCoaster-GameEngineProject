@@ -54,19 +54,21 @@ namespace our {
     };
 
     class LitMaterial : public TexturedMaterial {
-        Sampler* albedoMap;
-        glm::vec3 albedo = { 0.0, 0.0, 0.0 };
+    public:
 
-        Sampler* specularMap;
-        glm::vec3 specular = { 0.0, 0.0, 0.0 };
+        Texture2D* albedo_map;
+        glm::vec3 albedo_tint{};
 
-        Sampler* ambientOcclusionMap;
+        Texture2D* specular_map;
+        glm::vec3 specular_tint{};
 
-        Sampler* roughnessMap;
-        glm::vec2 roughnessRange = { 0.0, 0.0 };
+        Texture2D* roughness_map;
+        glm::vec2 roughness_range{};
 
-        Sampler* emissiveMap;
-        glm::vec3 emissive = { 0.0, 0.0, 0.0 };
+        Texture2D* ambient_occlusion_map;
+
+        Texture2D* emissive_map;
+        glm::vec3 emissive_tint{};
 
         void setup() const override;
         void deserialize(const nlohmann::json& data) override;
@@ -78,6 +80,8 @@ namespace our {
             return new TintedMaterial();
         } else if(type == "textured"){
             return new TexturedMaterial();
+        } else if (type == "lit") {
+            return new LitMaterial();
         } else {
             return new Material();
         }

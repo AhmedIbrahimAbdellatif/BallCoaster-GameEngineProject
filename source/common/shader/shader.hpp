@@ -55,8 +55,8 @@ namespace our {
             glUniform4f(getUniformLocation(uniform), value.x, value.y, value.z, value.w);
         }
 
-        void set(const std::string &uniform, glm::mat4 matrix) {
-            glUniformMatrix4fv(getUniformLocation(uniform), 1, false, glm::value_ptr(matrix));
+        void set(const std::string &uniform, glm::mat4 matrix, GLboolean transpose = false) {
+            glUniformMatrix4fv(getUniformLocation(uniform), 1, transpose, glm::value_ptr(matrix));
         }
 
         ShaderProgram(ShaderProgram const &) = delete;

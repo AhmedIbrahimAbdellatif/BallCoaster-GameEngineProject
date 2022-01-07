@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <string>
 #include <json/json.hpp>
+#include <glm/glm.hpp>
 
 namespace our {
 
@@ -32,6 +33,27 @@ namespace our {
             }
             return nullptr;
         };
+
+        static T* getTexture(const std::string& name, glm::vec<4, glm::uint8> defaultColor = glm::vec4(255, 255, 255, 255), glm::ivec2 size = glm::ivec2( 512, 512 )) 
+        {
+            auto* texPtr = get(name);
+            if (texPtr) {
+                return texPtr;
+            }
+
+            auto* data = new glm::vec<4, glm::uint8, glm::defaultp>[size.x * size.y];
+            std::fill_n(data, size.x * size.y, defaultColor);
+            
+            auto* texture = new Texture2D();
+            texture->bind();
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+            delete[] data;
+            return texture;
+        }
+
+
         // This function deletes all the assets held by this class and clear the assets map 
         static void clear(){
             for(auto& [name, asset] : assets){

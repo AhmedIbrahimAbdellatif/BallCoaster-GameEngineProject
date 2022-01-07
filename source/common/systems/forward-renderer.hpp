@@ -3,10 +3,13 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/mesh-renderer.hpp"
+#include "../components/light.hpp"
 
 #include <glad/gl.h>
 #include <vector>
 #include <algorithm>
+
+#define TRANSPOSE true
 
 namespace our
 {
@@ -21,6 +24,18 @@ namespace our
         Material* material;
     };
 
+    struct LightCommand {
+        /*int type;
+        glm::vec3 color;
+        glm::vec3 position, direction;
+        float attenuation_constant;
+        float attenuation_linear;
+        float attenuation_quadratic;
+        float inner_angle, outer_angle;*/
+        glm::mat4 localToWorld;
+        LightComponent* light;
+    };
+
     // A forward renderer is a renderer that draw the object final color directly to the framebuffer
     // In other words, the fragment shader in the material should output the color that we should see on the screen
     // This is different from more complex renderers that could draw intermediate data to a framebuffer before computing the final color
@@ -30,6 +45,7 @@ namespace our
         // We define them here (instead of being local to the "render" function) as an optimization to prevent reallocating them every frame
         std::vector<RenderCommand> opaqueCommands;
         std::vector<RenderCommand> transparentCommands;
+        std::vector<LightCommand> lightCommands;
     public:
         // This function should be called every frame to draw the given world
         // Both viewportStart and viewportSize are using to define the area on the screen where we will draw the scene
@@ -58,6 +74,13 @@ namespace our
                     // Otherwise, we add it to the opaque command list
                         opaqueCommands.push_back(command);
                     }
+                }
+                // If this entity has a light component
+                if (auto light = entity->getComponent<LightComponent>(); light) {
+                    LightCommand command;
+                    command.light = light;
+                    command.localToWorld = light->getOwner()->getLocalToWorldMatrix();
+                    lightCommands.push_back(command);
                 }
             }
 
@@ -99,20 +122,52 @@ namespace our
 
             //TODO: Draw all the opaque commands followed by all the transparent commands
             // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
-            drawCommands(opaqueCommands, VP);
-            drawCommands(transparentCommands, VP);
+            drawCommands(opaqueCommands, VP, camera);
+            drawCommands(transparentCommands, VP, camera);
         }
 
-        void drawCommands(std::vector<RenderCommand>& commands, glm::mat4& VP)
+        void drawCommands(std::vector<RenderCommand>& commands, glm::mat4& VP, CameraComponent*& camera)
         {
             for (auto command : commands)
             {
                 glm::mat4 MVP(VP * command.localToWorld);
                 command.material->setup();
-                command.material->shader->set("transform", MVP);
+                //command.material->shader->set("transform", MVP);
+                command.material->shader->set("object_to_world", command.localToWorld);
+                command.material->shader->set("view_projection", VP);
+                glm::vec4 eye(0.0, 0.0, 0.0, 1.0);
+                glm::vec3 cameraPosition = glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * eye);
+                command.material->shader->set("camera_position", cameraPosition);
+                command.material->shader->set("object_to_world_inv_transpose", glm::inverse(command.localToWorld), TRANSPOSE);
                 command.mesh->draw();
             }
         };
+
+        void addLights(std::vector<LightCommand>& commands, glm::mat4& VP, CameraComponent*& camera) {
+            int i = 0;
+            for (auto command : commands)
+            {
+                command.light->setup();
+                command.light->shader->set("lights[" + std::to_string(i) + "].type", static_cast<int>(command.light->lightType));
+                command.light->shader->set("lights[" + std::to_string(i) + "].diffuse", command.light->diffuse);
+                command.light->shader->set("lights[" + std::to_string(i) + "].specular", command.light->specular);
+                command.light->shader->set("lights[" + std::to_string(i) + "].ambient", command.light->ambient);
+                command.light->shader->set("lights[" + std::to_string(i) + "].position", command.light->position);
+                command.light->shader->set("lights[" + std::to_string(i) + "].direction", command.light->direction);
+                command.light->shader->set("lights[" + std::to_string(i) + "].attenuation_constant", command.light->attenuation.x);
+                command.light->shader->set("lights[" + std::to_string(i) + "].attenuation_linear", command.light->attenuation.y);
+                command.light->shader->set("lights[" + std::to_string(i) + "].attenuation_quadratic", command.light->attenuation.z);
+                command.light->shader->set("lights[" + std::to_string(i) + "].inner_angle", command.light->coneAngles.x);
+                command.light->shader->set("lights[" + std::to_string(i) + "].outer_angle", command.light->coneAngles.y);
+                command.light->shader->set("object_to_world", command.localToWorld);
+                command.light->shader->set("view_projection", VP);
+                glm::vec4 eye(0.0, 0.0, 0.0, 1.0);
+                glm::vec3 cameraPosition = glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * eye);
+                command.light->shader->set("camera_position", cameraPosition);
+                command.light->shader->set("object_to_world_inv_transpose", glm::inverse(command.localToWorld), TRANSPOSE);
+                i++;
+            }
+        }
 
     };
 

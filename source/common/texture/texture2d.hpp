@@ -15,7 +15,7 @@ namespace our {
 
             // generate texture object and select active texture unit
             glGenTextures(1, &name);
-            glActiveTexture(GL_TEXTURE0);
+            //glActiveTexture(GL_TEXTURE0);
         };
 
         // This deconstructor deletes the underlying OpenGL texture

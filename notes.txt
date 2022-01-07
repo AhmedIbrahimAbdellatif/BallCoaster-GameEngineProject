@@ -9,7 +9,7 @@ Light:
 4(done)- add light.hpp and light.cpp in CMake
 5(done)- add new light shader
 6(done)- lit material in material hpp
-7- in forward renderer pass lights first to uniforms
+7(done)- in forward renderer pass lights first to uniforms
 -----------------------------------------------------
 
 Game:

@@ -3,6 +3,7 @@
 #include "../ecs/component.hpp"
 
 #include <glm/mat4x4.hpp>
+#include "../shader/shader.hpp"
 
 namespace our {
 
@@ -15,10 +16,11 @@ namespace our {
 
     class LightComponent : public Component {
     public:
+        ShaderProgram* shader;
         LightType lightType;
         glm::vec3 position = { 0, 0, 0 };
-        glm::vec3 direction = { 0, 0, 0 };
-        glm::vec3 color = { 0, 0, 0 };
+        glm::vec3 direction = { 0, -1, 0 };
+        glm::vec3 color = { 1, 1, 1 };
         glm::vec3 attenuation = { 0, 0, 0 };
         glm::vec3 ambient = { 0, 0, 0 };
         glm::vec3 diffuse = { 0, 0, 0 };
@@ -28,6 +30,7 @@ namespace our {
         // The ID of this component type is "Light"
         static std::string getID() { return "Light"; }
 
+        void setup();
         void deserialize(const nlohmann::json& data) override;
     };
 

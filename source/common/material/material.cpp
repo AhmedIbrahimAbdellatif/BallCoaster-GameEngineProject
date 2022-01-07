@@ -61,4 +61,44 @@ namespace our {
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
     }
 
+    void LitMaterial::setup() const
+    {
+        TexturedMaterial::setup(); // parent's setup()
+
+        // setting samplers in texturedMaterial uniform
+        albedoMap->bind(1);
+        shader->set("texturedMaterial.albedo_map", 1);
+        specularMap->bind(2);
+        shader->set("texturedMaterial.specular_map", 2);
+        ambientOcclusionMap->bind(3);
+        shader->set("texturedMaterial.ambient_occlusion_map", 3);
+        roughnessMap->bind(4);
+        shader->set("texturedMaterial.roughness_map", 4);
+        emissiveMap->bind(5);
+        shader->set("texturedMaterial.emissive_map", 5);
+
+        // setting vectors in texturedMaterial uniform
+        shader->set("texturedMaterial.albedo_tint", albedo);
+        shader->set("texturedMaterial.specular_tint", specular);
+        shader->set("texturedMaterial.roughness_range", roughnessRange);
+        shader->set("texturedMaterial.emissive_tint", emissive);
+    }
+
+    void LitMaterial::deserialize(const nlohmann::json& data) {
+        TintedMaterial::deserialize(data);
+        if (!data.is_object()) return;
+        
+        // loading samplers
+        albedoMap = AssetLoader<Sampler>::get(data.value("albedoMap", ""));
+        specularMap = AssetLoader<Sampler>::get(data.value("specularMap", ""));
+        ambientOcclusionMap = AssetLoader<Sampler>::get(data.value("ambientOcclusionMap", ""));
+        roughnessMap = AssetLoader<Sampler>::get(data.value("roughnessMap", ""));
+        emissiveMap = AssetLoader<Sampler>::get(data.value("emissiveMap", ""));
+
+        // loading vectors
+        albedo = data.value("albedo", albedo);
+        specular = data.value("specular", specular);
+        roughnessRange = data.value("roughness", roughnessRange);
+        emissive = data.value("emissive", emissive);
+    }
 }

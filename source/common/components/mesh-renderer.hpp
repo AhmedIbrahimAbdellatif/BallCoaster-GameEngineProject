@@ -12,9 +12,11 @@ namespace our {
     public:
         Mesh* mesh; // The mesh that should be drawn
         Material* material; // The material used to draw the mesh
+        bool player = false;
 
         // The ID of this component type is "Mesh Renderer"
         static std::string getID() { return "Mesh Renderer"; }
+        bool isPlayer() { return player; }
 
         // Receives the mesh & material from the AssetLoader by the names given in the json object
         void deserialize(const nlohmann::json& data) override;

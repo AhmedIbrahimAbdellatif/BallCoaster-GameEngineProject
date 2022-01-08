@@ -53,8 +53,10 @@ namespace our {
         void deserialize(const nlohmann::json& data) override;
     };
 
-    class LitMaterial : public TexturedMaterial {
+    class LitMaterial : public Material {
     public:
+
+        Sampler* sampler;
 
         Texture2D* albedo_map;
         glm::vec3 albedo_tint{};

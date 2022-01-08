@@ -116,7 +116,8 @@
                     },
                     "tint": [1, 1, 1, 1],
                     "texture": "monkey",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "albedo_map": "monkey"
                 },
                 "moon":{
                     "type": "lit",

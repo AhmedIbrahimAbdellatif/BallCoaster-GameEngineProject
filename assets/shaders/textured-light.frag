@@ -78,8 +78,8 @@ void main() {
 
     // simulating light reflections
     vec3 ambient = sampled.ambient * (normal.y > 0 ? 
-                   mix(sky_light.middle_color, sky_light.top_color, normal.y) 
-                   : mix(sky_light.middle_color, sky_light.bottom_color, -normal.y));
+                   mix(sky_light.middle_color, sky_light.top_color, normal.y):
+                   mix(sky_light.middle_color, sky_light.bottom_color, -normal.y));
     
     // effect of light reflections and material emission
     vec3 accumulated_light = sampled.emissive + ambient;

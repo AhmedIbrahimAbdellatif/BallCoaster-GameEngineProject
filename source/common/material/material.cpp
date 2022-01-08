@@ -69,7 +69,7 @@ namespace our {
 
     void LitMaterial::setup() const
     {
-        TexturedMaterial::setup(); // parent's setup()
+        Material::setup(); // parent's setup()
 
         shader->set("material.albedo_tint", albedo_tint);
         shader->set("material.specular_tint", specular_tint);
@@ -107,9 +107,12 @@ namespace our {
     }
 
     void LitMaterial::deserialize(const nlohmann::json& data) {
-        TexturedMaterial::deserialize(data);
+        Material::deserialize(data);
         if (!data.is_object()) return;
         
+        sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
+
+        std::string test = data.value("albedo_map", "white");
         albedo_map = AssetLoader<Texture2D>::getTexture(data.value("albedo_map", "white"), glm::vec4(255, 255, 255, 255));
         albedo_tint = data.value<glm::vec3>("albedo_tint", { 1.0f, 1.0f, 1.0f });
         
@@ -121,7 +124,7 @@ namespace our {
 
         ambient_occlusion_map = AssetLoader<Texture2D>::getTexture(data.value<std::string>("ambient_occlusion_map", "white"), glm::vec4(255, 255, 255, 255));
 
-        emissive_map = AssetLoader<Texture2D>::getTexture(data.value<std::string>("emissive_map", ""), glm::vec4(0, 0, 0, 255));
+        emissive_map = AssetLoader<Texture2D>::getTexture(data.value<std::string>("emissive_map", "black"), glm::vec4(0, 0, 0, 255));
         emissive_tint = data.value<glm::vec3>("emissive_tint", { 1.0f, 1.0f, 1.0f });
     }
 }

@@ -6,7 +6,7 @@
 void our::LightComponent::deserialize(const nlohmann::json& data)
 {
     if (!data.is_object()) return;
-    shader = AssetLoader<ShaderProgram>::get(data["shader"].get<std::string>());
+    //shader = AssetLoader<ShaderProgram>::get(data["shader"].get<std::string>());
 
     std::string lightTypeStr = data.value("lightType", "directional");
     if (lightTypeStr == "point") {
@@ -31,5 +31,5 @@ void our::LightComponent::deserialize(const nlohmann::json& data)
 
 void our::LightComponent::setup()
 {
-    shader->use();
+    //shader->use();
 }

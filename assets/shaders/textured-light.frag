@@ -117,8 +117,9 @@ void main() {
         vec3 specular = sampled.specular * light.color * phong;
         
         accumulated_light += (diffuse + specular) * attenuation;
+        //accumulated_light += light.color;
     }
 
     // apply the total effect of lights to the color
-    frag_color = tint * fsin.color * texture(tex, fsin.tex_coord) + vec4(accumulated_light, 1.0f);
+    frag_color = tint * fsin.color * texture(tex, fsin.tex_coord) + vec4(accumulated_light, 0.0f);
 }

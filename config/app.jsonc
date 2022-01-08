@@ -269,14 +269,10 @@
                 "components": [
                     {
                         "type": "Light",
-                        "shader": "defaultLight",
-                        "position": [0, 10, 0],
-                        "direction": [0, -1, 0],
-                        "color": [255, 0, 0]
-                    },
-                    {
-                        "type": "Movement",
-                        "angularVelocity": [0, 90, 0]
+                        // "shader": "defaultLight",
+                        "position": [0, 1, 5],
+                        "direction": [-1, -1, -1],
+                        "color": [0, 0, 255, 255]
                     }
                 ]
             }

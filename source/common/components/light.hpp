@@ -16,7 +16,7 @@ namespace our {
 
     class LightComponent : public Component {
     public:
-        ShaderProgram* shader;
+        //ShaderProgram* shader;
         LightType lightType;
         glm::vec3 position = { 0, 0, 0 };
         glm::vec3 direction = { 0, -1, 0 };

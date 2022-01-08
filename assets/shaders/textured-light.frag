@@ -77,9 +77,9 @@ void main() {
     vec3 view = normalize(fsin.view);
 
     // simulating light reflections
-    vec3 ambient = sampled.ambient * (normal.y > 0 ? 
-                   mix(sky_light.middle_color, sky_light.top_color, normal.y):
-                   mix(sky_light.middle_color, sky_light.bottom_color, -normal.y));
+    vec3 ambient = sampled.ambient; //* (normal.y > 0 ? 
+                   //mix(sky_light.middle_color, sky_light.top_color, normal.y):
+                   //mix(sky_light.middle_color, sky_light.bottom_color, -normal.y));
     
     // effect of light reflections and material emission
     vec3 accumulated_light = sampled.emissive + ambient;
@@ -122,5 +122,8 @@ void main() {
 
     // apply the total effect of lights to the color
     //frag_color = tint * fsin.color * texture(tex, fsin.tex_coord) + vec4(accumulated_light, 0.0f);
-    frag_color = fsin.color * vec4(accumulated_light, 1.0f);
+    
+    frag_color = fsin.color * vec4(accumulated_light, texture(material.albedo_map, fsin.tex_coord).a);
+    //frag_color = vec4(texture(material.albedo_map, fsin.tex_coord).rgb, 1.0f);
+    //frag_color = vec4(sampled.diffuse + sampled.specular + sampled.ambient, 1.0f);
 }

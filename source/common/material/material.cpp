@@ -76,9 +76,9 @@ namespace our {
         shader->set("material.roughness_range", roughness_range);
         shader->set("material.emissive_tint", emissive_tint);
 
-        shader->set("sky_light.top_color", {0, 0, 255});
-        shader->set("sky_light.middle_color", { 0, 0, 0});
-        shader->set("sky_light.bottom_color", { 255, 0, 0 });
+        shader->set("sky_light.top_color", {0.5, 0.5, 1});
+        shader->set("sky_light.middle_color", { 1, 1, 1});
+        shader->set("sky_light.bottom_color", { 0.5, 1, 0.5 });
 
         glActiveTexture(GL_TEXTURE1);
         albedo_map->bind();
@@ -125,6 +125,6 @@ namespace our {
         ambient_occlusion_map = AssetLoader<Texture2D>::getTexture(data.value<std::string>("ambient_occlusion_map", "white"), glm::vec4(255, 255, 255, 255));
 
         emissive_map = AssetLoader<Texture2D>::getTexture(data.value<std::string>("emissive_map", "black"), glm::vec4(0, 0, 0, 255));
-        emissive_tint = data.value<glm::vec3>("emissive_tint", { 1.0f, 1.0f, 1.0f });
+        emissive_tint = data.value<glm::vec3>("emissive_tint", { 1.0f, 0.0f, 1.0f });
     }
 }

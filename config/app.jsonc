@@ -38,7 +38,12 @@
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
                 "glass": "assets/textures/glass-panels.png",
-                "monkey": "assets/textures/monkey.png"
+                "monkey": "assets/textures/monkey.png",
+                "monkey_albedo": "assets/textures/albedo.jpg",
+                "monkey_emissive": "assets/textures/emissive.jpg",
+                "monkey_specular": "assets/textures/specular.jpg",
+                "monkey_roughness": "assets/textures/roughness.jpg",
+                "monkey_ambient_occlusion": "assets/textures/ambient_occlusion.jpg"
             },
             "meshes":{
                 "cube": "assets/models/cube.obj",
@@ -86,6 +91,7 @@
                     "transparent": true,
                     "tint": [1, 1, 1, 1],
                     "texture": "glass",
+                    "albedo_map": "glass",
                     "sampler": "pixelated"
                 },
                 "grass":{
@@ -101,6 +107,7 @@
                     },
                     "tint": [1, 1, 1, 1],
                     "texture": "grass",
+                    "albedo_map": "grass",
                     "sampler": "default"
                 },
                 "monkey":{
@@ -117,7 +124,11 @@
                     "tint": [1, 1, 1, 1],
                     "texture": "monkey",
                     "sampler": "default",
-                    "albedo_map": "monkey"
+                    "albedo_map": "monkey_albedo",
+                    "emissive_map": "monkey_emissive",
+                    "specular_map": "monkey_specular",
+                    "roughness_map": "monkey_roughness"//,
+                    //"ambient_occlusion_map": "monkey_ambient_occlusion"
                 },
                 "moon":{
                     "type": "lit",
@@ -132,6 +143,8 @@
                     },
                     "tint": [1, 1, 1, 1],
                     "texture": "moon",
+                    "albedo_map": "moon",
+                    "roughness_map": "monkey_roughness",
                     "sampler": "default"
                 }
             }
@@ -273,7 +286,7 @@
                         // "shader": "defaultLight",
                         "position": [0, 1, 5],
                         "direction": [0, -1, 0],
-                        "color": [255, 0, 255, 255]
+                        "color": [0, 0, 0.1, 1]
                     }
                 ]
             }

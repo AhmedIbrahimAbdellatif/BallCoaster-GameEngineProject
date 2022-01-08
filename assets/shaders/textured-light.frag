@@ -50,7 +50,7 @@ struct Material {
 
 #define MAX_LIGHT_COUNT 16
 uniform TexturedMaterial material;
-uniform int light_count;
+uniform int light_count = 1;
 uniform Light lights[MAX_LIGHT_COUNT];
 uniform SkyLight sky_light;
 
@@ -121,5 +121,6 @@ void main() {
     }
 
     // apply the total effect of lights to the color
-    frag_color = tint * fsin.color * texture(tex, fsin.tex_coord) + vec4(accumulated_light, 0.0f);
+    //frag_color = tint * fsin.color * texture(tex, fsin.tex_coord) + vec4(accumulated_light, 0.0f);
+    frag_color = fsin.color * vec4(accumulated_light, 1.0f);
 }

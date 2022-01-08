@@ -8,6 +8,7 @@
 #include <glad/gl.h>
 #include <vector>
 #include <algorithm>
+#include <stdlib.h>
 
 #define TRANSPOSE true
 
@@ -144,12 +145,12 @@ namespace our
                 for (auto lightCommand : lightCommands)
                 {
                     command.material->setup();
+                    // std::string test = std::to_string(i);
+
                     command.material->shader->set("lights[" + std::to_string(i) + "].type", static_cast<int>(lightCommand.light->lightType));
-                    command.material->shader->set("lights[" + std::to_string(i) + "].diffuse", lightCommand.light->diffuse);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].specular", lightCommand.light->specular);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].ambient", lightCommand.light->ambient);
+                    command.material->shader->set("lights[" + std::to_string(i) + "].color", lightCommand.light->color);
                     command.material->shader->set("lights[" + std::to_string(i) + "].position", lightCommand.light->position);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].direction", lightCommand.light->direction);
+                    command.material->shader->set("lights[" + std::to_string(i) + "].direction", glm::normalize(lightCommand.light->direction));
                     command.material->shader->set("lights[" + std::to_string(i) + "].attenuation_constant", lightCommand.light->attenuation.x);
                     command.material->shader->set("lights[" + std::to_string(i) + "].attenuation_linear", lightCommand.light->attenuation.y);
                     command.material->shader->set("lights[" + std::to_string(i) + "].attenuation_quadratic", lightCommand.light->attenuation.z);
@@ -157,6 +158,7 @@ namespace our
                     command.material->shader->set("lights[" + std::to_string(i) + "].outer_angle", lightCommand.light->coneAngles.y);
                     i++;
                 }
+                command.material->shader->set("light_count", i);
                 command.mesh->draw();
             }
         };

@@ -20,7 +20,7 @@ namespace our {
         LightType lightType;
         glm::vec3 position = { 0, 0, 0 };
         glm::vec3 direction = { 0, -1, 0 };
-        glm::vec3 color = { 1, 1, 1 };
+        glm::vec3 color = { 255, 255, 255 };
         glm::vec3 attenuation = { 0, 0, 0 };
         glm::vec3 ambient = { 0, 0, 0 };
         glm::vec3 diffuse = { 0, 0, 0 };

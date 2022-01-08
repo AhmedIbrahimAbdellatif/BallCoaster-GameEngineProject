@@ -24,6 +24,10 @@
                   "vs": "assets/shaders/light.vert",
                   "fs": "assets/shaders/textured-light.frag"
                 },
+                "defaultLight": {
+                    "vs": "assets/shaders/light.vert",
+                    "fs": "assets/shaders/light.frag"
+                  },
                 "sky": {
                 "vs": "assets/shaders/sky_transform.vert",
                 "fs": "assets/shaders/sky.frag"
@@ -253,6 +257,22 @@
                         "type": "Mesh Renderer",
                         "mesh": "sphere",
                         "material": "moon"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
+                ]
+            },
+            {
+                "position": [0, 10, 0],
+                "components": [
+                    {
+                        "type": "Light",
+                        "shader": "defaultLight",
+                        "position": [0, 10, 0],
+                        "direction": [0, -1, 0],
+                        "color": [255, 0, 0]
                     },
                     {
                         "type": "Movement",

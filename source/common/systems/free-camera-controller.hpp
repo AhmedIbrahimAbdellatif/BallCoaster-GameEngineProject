@@ -12,6 +12,8 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 
+#include <systems/obstacle-collision.hpp>
+
 namespace our
 {
 
@@ -29,7 +31,7 @@ namespace our
         }
 
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
-        void update(World* world, float deltaTime) {
+        void update(World* world, float deltaTime, our::ObstacleCollisionSystem* obstacleCollisionSystem) {
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
             // As soon as we find one, we break
             CameraComponent* camera = nullptr;
@@ -45,7 +47,7 @@ namespace our
 
             for(auto entity : world->getEntities()){
                 mesh = entity->getComponent<MeshRendererComponent>();
-                if (mesh){
+                if (mesh) {
                     mesh = mesh->isPlayer() ? mesh : nullptr;
                 }
                 controller = entity->getComponent<FreeCameraControllerComponent>();
@@ -70,6 +72,10 @@ namespace our
             // We get a reference to the entity's position and rotation
             glm::vec3& position = entity->localTransform.position;
             glm::vec3& rotation = entity->localTransform.rotation;
+
+            if (obstacleCollisionSystem->isCollision(mesh->radius, position)) {
+                bool collision = true;
+            }
 
             // // If the left mouse button is pressed, we get the change in the mouse location
             // // and use it to update the camera rotation

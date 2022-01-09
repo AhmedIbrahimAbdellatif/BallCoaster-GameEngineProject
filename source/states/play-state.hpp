@@ -6,7 +6,9 @@
 #include <systems/forward-renderer.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
+#include <systems/obstacle-collision.hpp>
 #include <asset-loader.hpp>
+#include <components/mesh-renderer.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate: public our::State {
@@ -15,6 +17,7 @@ class Playstate: public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    our::ObstacleCollisionSystem obstacleCollisionSystem;
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -26,6 +29,14 @@ class Playstate: public our::State {
         // If we have a world in the scene config, we use it to populate our world
         if(config.contains("world")){
             world.deserialize(config["world"]);
+            for(auto entity : world.getEntities()){
+                our::MeshRendererComponent* mesh = entity->getComponent<our::MeshRendererComponent>();
+                if(mesh != nullptr && mesh->isObstacle()) {
+                    float obstacleRadius = mesh->radius;
+                    glm::vec3 obstaclePosition = mesh->fixedPosition;
+                    obstacleCollisionSystem.addObstacle(obstacleRadius, obstaclePosition);
+                }
+            }
         }
         // We initialize the camera controller system since it needs a pointer to the app
         cameraController.enter(getApp());
@@ -34,7 +45,7 @@ class Playstate: public our::State {
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
-        cameraController.update(&world, (float)deltaTime);
+        cameraController.update(&world, (float)deltaTime, &obstacleCollisionSystem);
         // And finally we use the renderer system to draw the scene
         auto size = getApp()->getFrameBufferSize();
         renderer.render(&world, glm::ivec2(0, 0), size);

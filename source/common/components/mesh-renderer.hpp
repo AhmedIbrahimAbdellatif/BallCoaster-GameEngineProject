@@ -13,10 +13,14 @@ namespace our {
         Mesh* mesh; // The mesh that should be drawn
         Material* material; // The material used to draw the mesh
         bool player = false;
+        bool obstacle = false;
+        float radius = 1.0f;
+        glm::vec3 fixedPosition = { 0.0f, 0.0f, 0.0f };
 
         // The ID of this component type is "Mesh Renderer"
         static std::string getID() { return "Mesh Renderer"; }
         bool isPlayer() { return player; }
+        bool isObstacle() { return obstacle; }
 
         // Receives the mesh & material from the AssetLoader by the names given in the json object
         void deserialize(const nlohmann::json& data) override;

@@ -282,6 +282,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 1.0,
+                        "positionX": 5, 
+                        "positionY": 0, 
+                        "positionZ":-5,
                         "obstacle": true
                     }
                 ]
@@ -296,6 +299,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 2.0,
+                        "positionX":-5, 
+                        "positionY":0, 
+                        "positionZ":-9,
                         "obstacle": true
                     }
                 ]
@@ -310,6 +316,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 2.0,
+                        "positionX":-3, 
+                        "positionY": 0, 
+                        "positionZ":-15,
                         "obstacle": true
                     }
                 ]
@@ -324,6 +333,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 3.0,
+                        "positionX": 3, 
+                        "positionY": 0, 
+                        "positionZ":-20,
                         "obstacle": true
                     }
                 ]
@@ -338,6 +350,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 2.0,
+                        "positionX": 0, 
+                        "positionY": 0, 
+                        "positionZ":-30,
                         "obstacle": true
                     }
                 ]
@@ -352,6 +367,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 1.0,
+                        "positionX": 3, 
+                        "positionY": 0, 
+                        "positionZ":-33,
                         "obstacle": true
                     }
                 ]
@@ -366,6 +384,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 2.0,
+                        "positionX": -3, 
+                        "positionY": 0, 
+                        "positionZ":-35,
                         "obstacle": true
                     }
                 ]
@@ -380,6 +401,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 2.0,
+                        "positionX": 4, 
+                        "positionY": 0, 
+                        "positionZ":-37,
                         "obstacle": true
                     }
                 ]
@@ -394,6 +418,9 @@
                         "mesh": "sphere",
                         "material": "grass",
                         "radius": 1.0,
+                        "positionX": 7, 
+                        "positionY": 0, 
+                        "positionZ":-40,
                         "obstacle": true
                     }
                 ]

@@ -9,5 +9,10 @@ namespace our {
         mesh = AssetLoader<Mesh>::get(data["mesh"].get<std::string>());
         material = AssetLoader<Material>::get(data["material"].get<std::string>());
         player = data.value<bool>("player", false);
+        obstacle = data.value<bool>("obstacle", false);
+        radius = data.value<float>("radius", 1.0f);
+        fixedPosition.x = data.value<float>("positionX", 1.0f);
+        fixedPosition.y = data.value<float>("positionY", 1.0f);
+        fixedPosition.z = data.value<float>("positionZ", 1.0f);
     }
 }

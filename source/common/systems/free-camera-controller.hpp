@@ -13,6 +13,9 @@
 #include <glm/gtx/fast_trigonometry.hpp>
 
 #include <systems/obstacle-collision.hpp>
+#include <systems/movement.hpp>
+
+#define FINISH_LINE -50
 
 namespace our
 {
@@ -23,6 +26,12 @@ namespace our
     class FreeCameraControllerSystem {
         Application* app; // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
+    
+    private:
+        bool stopGame = false;
+        void stopMoving() {
+            stopGame = true;
+        }
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -31,7 +40,8 @@ namespace our
         }
 
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
-        void update(World* world, float deltaTime, our::ObstacleCollisionSystem* obstacleCollisionSystem) {
+        void update(World* world, float deltaTime, our::ObstacleCollisionSystem* obstacleCollisionSystem, 
+                    our::MovementSystem* movementSystem) {
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
             // As soon as we find one, we break
             CameraComponent* camera = nullptr;
@@ -74,7 +84,13 @@ namespace our
             glm::vec3& rotation = entity->localTransform.rotation;
 
             if (obstacleCollisionSystem->isCollision(mesh->radius, position)) {
-                bool collision = true;
+                stopMoving();
+                movementSystem->endGame();
+            }
+
+            if (position.z <= FINISH_LINE) {
+                stopMoving();
+                movementSystem->endGame();
             }
 
             // // If the left mouse button is pressed, we get the change in the mouse location
@@ -116,11 +132,11 @@ namespace our
             // if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * (deltaTime * current_sensitivity.y);
             // if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * (deltaTime * current_sensitivity.y);
             // A & D moves the player left or right 
-            if(app->getKeyboard().isPressed(GLFW_KEY_D)) {
+            if(app->getKeyboard().isPressed(GLFW_KEY_D) && !stopGame) {
                 glm::vec3 newPosition = position + right * (deltaTime * current_sensitivity.x);
                 position = (newPosition.x <= 9)? newPosition : position;
             }
-            if(app->getKeyboard().isPressed(GLFW_KEY_A)) {
+            if(app->getKeyboard().isPressed(GLFW_KEY_A) && !stopGame) {
                 glm::vec3 newPosition = position - right * (deltaTime * current_sensitivity.x);
                 position = (newPosition.x >= -9)? newPosition : position;
             }

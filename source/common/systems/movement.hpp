@@ -15,6 +15,7 @@ namespace our
     // This system is added as a simple example for how use the ECS framework to implement logic. 
     // For more information, see "common/components/movement.hpp"
     class MovementSystem {
+        bool stopGame = false;
     public:
 
         // This should be called every frame to update all entities containing a MovementComponent. 
@@ -24,12 +25,16 @@ namespace our
                 // Get the movement component if it exists
                 MovementComponent* movement = entity->getComponent<MovementComponent>();
                 // If the movement component exists
-                if(movement){
+                if(movement && !stopGame){
                     // Change the position and rotation based on the linear & angular velocity and delta time.
                     entity->localTransform.position += deltaTime * movement->linearVelocity;
                     entity->localTransform.rotation += deltaTime * movement->angularVelocity;
                 }
             }
+        }
+
+        void endGame() {
+            stopGame = true;
         }
 
     };

@@ -177,7 +177,7 @@
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [0, 0, -1]
+                        "linearVelocity": [0, 0, -4]
                     },
                     {
                         "type": "Free Camera Controller"
@@ -258,11 +258,12 @@
                         "type": "Mesh Renderer",
                         "mesh": "sphere",
                         "material": "monkey",
+                        "radius": 1.0,
                         "player": true
                     },
                     {
                         "type": "Movement",
-                        "linearVelocity": [0, 0, -1],
+                        "linearVelocity": [0, 0, -4],
                         "angularVelocity": [-90, 0, 0]
                     },
                     {
@@ -270,6 +271,134 @@
                     }
                 ]
             },
+            //OBSTACLES ######################################
+            {
+                "position": [5, 0, -5],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 1.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            {
+                "position": [-5, 0, -9],
+                "rotation": [0, 0, 0],
+                "scale": [2, 2, 2],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 2.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            {
+                "position": [-3, 0, -15],
+                "rotation": [0, 0, 0],
+                "scale": [2, 2, 2],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 2.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            {
+                "position": [3, 0, -20],
+                "rotation": [0, 0, 0],
+                "scale": [3, 3, 3],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 3.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            {
+                "position": [0, 0, -30],
+                "rotation": [0, 0, 0],
+                "scale": [2, 2, 2],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 2.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            {
+                "position": [3, 0, -33],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 1.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            {
+                "position": [-3, 0, -35],
+                "rotation": [0, 0, 0],
+                "scale": [2, 2, 2],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 2.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            {
+                "position": [4, 0, -37],
+                "rotation": [0, 0, 0],
+                "scale": [2, 2, 2],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 2.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            {
+                "position": [7, 0, -40],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "grass",
+                        "radius": 1.0,
+                        "obstacle": true
+                    }
+                ]
+            },
+            //END OF OBSTACLES ###############################
             {
                 "position": [2, 1, 0],
                 "rotation": [0, 90, 0],

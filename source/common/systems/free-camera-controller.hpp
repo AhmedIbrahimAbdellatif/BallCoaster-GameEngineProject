@@ -3,6 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
+#include "../components/mesh-renderer.hpp"
 
 #include "../application.hpp"
 
@@ -109,8 +110,14 @@ namespace our
             // if(app->getKeyboard().isPressed(GLFW_KEY_Q)) position += up * (deltaTime * current_sensitivity.y);
             // if(app->getKeyboard().isPressed(GLFW_KEY_E)) position -= up * (deltaTime * current_sensitivity.y);
             // A & D moves the player left or right 
-            if(app->getKeyboard().isPressed(GLFW_KEY_D)) position += right * (deltaTime * current_sensitivity.x);
-            if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * (deltaTime * current_sensitivity.x);
+            if(app->getKeyboard().isPressed(GLFW_KEY_D)) {
+                glm::vec3 newPosition = position + right * (deltaTime * current_sensitivity.x);
+                position = (newPosition.x <= 9)? newPosition : position;
+            }
+            if(app->getKeyboard().isPressed(GLFW_KEY_A)) {
+                glm::vec3 newPosition = position - right * (deltaTime * current_sensitivity.x);
+                position = (newPosition.x >= -9)? newPosition : position;
+            }
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked

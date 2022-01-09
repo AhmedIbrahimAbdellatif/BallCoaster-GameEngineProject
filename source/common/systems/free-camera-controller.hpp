@@ -32,7 +32,7 @@ namespace our
         void stopMoving() {
             stopGame = true;
         }
-
+        bool win = true;
     public:
         // When a state enters, it should call this function and give it the pointer to the application
         void enter(Application* app){
@@ -40,7 +40,7 @@ namespace our
         }
 
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
-        void update(World* world, float deltaTime, our::ObstacleCollisionSystem* obstacleCollisionSystem, 
+        bool update(World* world, float deltaTime, our::ObstacleCollisionSystem* obstacleCollisionSystem, 
                     our::MovementSystem* movementSystem) {
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
             // As soon as we find one, we break
@@ -53,7 +53,7 @@ namespace our
                 if(camera && controller) break;
             }
             // If there is no entity with both a CameraComponent and a FreeCameraControllerComponent, we can do nothing so we return
-            if(!(camera && controller)) return;
+            if(!(camera && controller)) return false;
 
             for(auto entity : world->getEntities()){
                 mesh = entity->getComponent<MeshRendererComponent>();
@@ -63,7 +63,7 @@ namespace our
                 controller = entity->getComponent<FreeCameraControllerComponent>();
                 if(mesh && controller) break;
             }
-            if(!(mesh && controller)) return;
+            if(!(mesh && controller)) return false;
 
             // Get the entity that we found via getOwner of camera (we could use controller->getOwner())
             //Entity* entity = camera->getOwner();
@@ -84,6 +84,7 @@ namespace our
             glm::vec3& rotation = entity->localTransform.rotation;
 
             if (obstacleCollisionSystem->isCollision(mesh->radius, position)) {
+                win = false;
                 stopMoving();
                 movementSystem->endGame();
             }
@@ -140,6 +141,12 @@ namespace our
                 glm::vec3 newPosition = position - right * (deltaTime * current_sensitivity.x);
                 position = (newPosition.x >= -9)? newPosition : position;
             }
+
+            return stopGame;
+        }
+
+        bool isWin() {
+            return win;
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
@@ -149,6 +156,8 @@ namespace our
                 app->getMouse().unlockMouse(app->getWindow());
             }
         }
+
+
 
     };
 

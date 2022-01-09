@@ -45,7 +45,15 @@ class Playstate: public our::State {
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
-        cameraController.update(&world, (float)deltaTime, &obstacleCollisionSystem, &movementSystem);
+        bool stopPlaying = cameraController.update(&world, (float)deltaTime, &obstacleCollisionSystem, &movementSystem);
+        if (stopPlaying) {
+            if (cameraController.isWin()) {
+                // announce winning
+            }
+            else {
+                // announce losing
+            }
+        }
         // And finally we use the renderer system to draw the scene
         auto size = getApp()->getFrameBufferSize();
         renderer.render(&world, glm::ivec2(0, 0), size);

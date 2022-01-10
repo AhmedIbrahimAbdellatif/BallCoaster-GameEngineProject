@@ -1,1 +1,0 @@
-./bin/GAME_APPLICATION -f=2 -c="config/transform-test/test-0.jsonc"

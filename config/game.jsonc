@@ -39,6 +39,8 @@
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
                 "glass": "assets/textures/glass-panels.png",
+                "win": "assets/textures/win.jpg",
+                "lose": "assets/textures/lose.jpg",
                 "player": "assets/textures/monkey.png",
                 "player_albedo": "assets/textures/albedo.jpg",
                 "player_emissive": "assets/textures/emissive.jpg",
@@ -129,6 +131,38 @@
                     "albedo_map": "wood",
                     "sampler": "default"
                 },
+                "win":{
+                    "type": "lit",
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "win",
+                    "albedo_map": "win",
+                    "sampler": "default"
+                },
+                "lose":{
+                    "type": "lit",
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "lose",
+                    "albedo_map": "lose",
+                    "sampler": "default"
+                },
                 "player":{
                     "type": "lit",
                     "shader": "light",
@@ -208,6 +242,18 @@
                         "type": "Mesh Renderer",
                         "mesh": "ground",
                         "material": "wood"
+                    }
+                ]
+            },
+            {
+                "position": [0, -0.95, -50],
+                "rotation": [-90, 0, 0],
+                "scale": [10, 0.5, 0.5],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "glass"
                     }
                 ]
             },//surrounding cube
@@ -582,6 +628,34 @@
                         "position": [0, 1, 5],
                         "direction": [0, -1, 0],
                         "color": [0, 0, 0.1, 1]
+                    }
+                ]
+            }
+        ],
+        "win":[
+            {
+                "position": [0, 5, -55],
+                "rotation": [0, 0, 0],
+                "scale": [5, 3, 3],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "win"
+                    }
+                ]
+            }
+        ],
+        "lose":[
+            {
+                "position": [0, 5, -55],
+                "rotation": [0, 0, 0],
+                "scale": [10, 5, 5],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "lose"
                     }
                 ]
             }

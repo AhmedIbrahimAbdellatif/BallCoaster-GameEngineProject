@@ -48,11 +48,18 @@ class Playstate: public our::State {
         movementSystem.update(&world, (float)deltaTime);
         bool stopPlaying = cameraController.update(&world, (float)deltaTime, &obstacleCollisionSystem, &movementSystem);
         if (stopPlaying) {
+            auto& config = getApp()->getConfig()["scene"];
             if (cameraController.isWin()) {
                 // announce winning
+                if(config.contains("win")){
+                    world.deserialize(config["win"]);
+                }
             }
             else {
                 // announce losing
+                if(config.contains("lose")){
+                    world.deserialize(config["lose"]);
+                }
             }
         }
         // And finally we use the renderer system to draw the scene

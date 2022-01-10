@@ -46,7 +46,13 @@
                 "player_emissive": "assets/textures/emissive.jpg",
                 "player_specular": "assets/textures/specular.jpg",
                 "player_roughness": "assets/textures/roughness.jpg",
-                "player_ambient_occlusion": "assets/textures/ambient_occlusion.jpg"
+                "player_ambient_occlusion": "assets/textures/ambient_occlusion.jpg",
+                "zero": "assets/textures/zero.jpg",
+                "one": "assets/textures/one.png",
+                "two": "assets/textures/two.png",
+                "three": "assets/textures/three.jpg",
+                "four": "assets/textures/four.jpg",
+                "five": "assets/textures/five.jpg"
             },
             "meshes":{
                 "cube": "assets/models/cube.obj",
@@ -198,6 +204,102 @@
                     "texture": "moon",
                     "albedo_map": "moon",
                     "roughness_map": "player_roughness",
+                    "sampler": "default"
+                },
+                "zero":{
+                    "type": "lit",
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "zero",
+                    "albedo_map": "zero",
+                    "sampler": "default"
+                },
+                "one":{
+                    "type": "lit",
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "one",
+                    "albedo_map": "one",
+                    "sampler": "default"
+                },
+                "two":{
+                    "type": "lit",
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "two",
+                    "albedo_map": "two",
+                    "sampler": "default"
+                },
+                "three":{
+                    "type": "lit",
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "three",
+                    "albedo_map": "three",
+                    "sampler": "default"
+                },
+                "four":{
+                    "type": "lit",
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "four",
+                    "albedo_map": "four",
+                    "sampler": "default"
+                },
+                "five":{
+                    "type": "lit",
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "five",
+                    "albedo_map": "five",
                     "sampler": "default"
                 }
             }
@@ -656,6 +758,90 @@
                         "type": "Mesh Renderer",
                         "mesh": "plane",
                         "material": "lose"
+                    }
+                ]
+            }
+        ],
+        "zero":[
+            {
+                "position": [10, 5, -53],
+                "rotation": [0, 0, 0],
+                "scale": [3, 3, 3],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "zero"
+                    }
+                ]
+            }
+        ],
+        "one":[
+            {
+                "position": [10, 5, -52.9],
+                "rotation": [0, 0, 0],
+                "scale": [3, 3, 3],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "one"
+                    }
+                ]
+            }
+        ],
+        "two":[
+            {
+                "position": [10, 5, -52.8],
+                "rotation": [0, 0, 0],
+                "scale": [3, 3, 3],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "two"
+                    }
+                ]
+            }
+        ],
+        "three":[
+            {
+                "position": [10, 5, -52.7],
+                "rotation": [0, 0, 0],
+                "scale": [3, 3, 3],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "three"
+                    }
+                ]
+            }
+        ],
+        "four":[
+            {
+                "position": [10, 5, -52.6],
+                "rotation": [0, 0, 0],
+                "scale": [3, 3, 3],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "four"
+                    }
+                ]
+            }
+        ],
+        "five":[
+            {
+                "position": [10, 5, -52.5],
+                "rotation": [0, 0, 0],
+                "scale": [3, 3, 3],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "plane",
+                        "material": "five"
                     }
                 ]
             }

@@ -47,8 +47,8 @@ class Playstate: public our::State {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         bool stopPlaying = cameraController.update(&world, (float)deltaTime, &obstacleCollisionSystem, &movementSystem);
+        auto& config = getApp()->getConfig()["scene"];
         if (stopPlaying) {
-            auto& config = getApp()->getConfig()["scene"];
             if (cameraController.isWin()) {
                 // announce winning
                 if(config.contains("win")){
@@ -61,6 +61,25 @@ class Playstate: public our::State {
                     world.deserialize(config["lose"]);
                 }
             }
+        }
+        int score = cameraController.getScore();
+        if(score == 0){
+            if(config.contains("zero")){ world.deserialize(config["zero"]);}
+        }
+        else if(score == 1){
+            if(config.contains("one")){ world.deserialize(config["one"]);}
+        }
+        else if(score == 2){
+            if(config.contains("two")){ world.deserialize(config["two"]);}
+        }
+        else if(score == 3){
+            if(config.contains("three")){ world.deserialize(config["three"]);}
+        }
+        else if(score == 4){
+            if(config.contains("four")){ world.deserialize(config["four"]);}
+        }
+        else if(score == 5){
+            if(config.contains("five")){ world.deserialize(config["five"]);}
         }
         // And finally we use the renderer system to draw the scene
         auto size = getApp()->getFrameBufferSize();

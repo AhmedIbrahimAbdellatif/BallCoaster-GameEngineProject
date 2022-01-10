@@ -26,6 +26,7 @@ namespace our
     class FreeCameraControllerSystem {
         Application* app; // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
+        int score = 0;
     
     private:
         bool stopGame = false;
@@ -37,6 +38,10 @@ namespace our
         // When a state enters, it should call this function and give it the pointer to the application
         void enter(Application* app){
             this->app = app;
+        }
+
+        int getScore(){
+            return score;
         }
 
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
@@ -124,6 +129,12 @@ namespace our
             glm::vec3 current_sensitivity = controller->positionSensitivity;
             // If the LEFT SHIFT key is pressed, we multiply the position sensitivity by the speed up factor
             if(app->getKeyboard().isPressed(GLFW_KEY_LEFT_SHIFT)) current_sensitivity *= controller->speedupFactor;
+            if(position.z < -9){ score = 1;}
+            if(position.z < -18){ score = 2;}
+            if(position.z < -27){ score = 3;}
+            if(position.z < -36){ score = 4;}
+            if(position.z < -45){ score = 5;}
+
 
             // // We change the camera position based on the keys WASD/QE
             // // S & W moves the player back and forth

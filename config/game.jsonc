@@ -1,5 +1,6 @@
 {
-    "start-scene": "main",
+    "start-scene": "menu",
+    "game-scene": "game",
     "window":
     {
         "title":"Default Game Window",
@@ -449,7 +450,7 @@
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "plane",
+                        "mesh": "ground",
                         "material": "wood"
                     }
                 ]
@@ -559,6 +560,17 @@
                         "type": "Mesh Renderer",
                         "mesh": "cube",
                         "material": "glass"
+                    }
+                ]
+            },
+            {
+                "position": [0, 10, 0],
+                "components": [
+                    {
+                        "type": "Light",
+                        "position": [0, 1, 5],
+                        "direction": [0, -1, 0],
+                        "color": [0, 0, 0.1, 1]
                     }
                 ]
             }

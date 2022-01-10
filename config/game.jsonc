@@ -38,12 +38,12 @@
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
                 "glass": "assets/textures/glass-panels.png",
-                "monkey": "assets/textures/monkey.png",
-                "monkey_albedo": "assets/textures/albedo.jpg",
-                "monkey_emissive": "assets/textures/emissive.jpg",
-                "monkey_specular": "assets/textures/specular.jpg",
-                "monkey_roughness": "assets/textures/roughness.jpg",
-                "monkey_ambient_occlusion": "assets/textures/ambient_occlusion.jpg"
+                "player": "assets/textures/monkey.png",
+                "player_albedo": "assets/textures/albedo.jpg",
+                "player_emissive": "assets/textures/emissive.jpg",
+                "player_specular": "assets/textures/specular.jpg",
+                "player_roughness": "assets/textures/roughness.jpg",
+                "player_ambient_occlusion": "assets/textures/ambient_occlusion.jpg"
             },
             "meshes":{
                 "cube": "assets/models/cube.obj",
@@ -128,7 +128,7 @@
                     "albedo_map": "wood",
                     "sampler": "default"
                 },
-                "monkey":{
+                "player":{
                     "type": "lit",
                     "shader": "light",
                     "pipelineState": {
@@ -140,13 +140,13 @@
                         }
                     },
                     "tint": [1, 1, 1, 1],
-                    "texture": "monkey",
+                    "texture": "player",
                     "sampler": "default",
-                    "albedo_map": "monkey_albedo",
-                    "emissive_map": "monkey_emissive",
-                    "specular_map": "monkey_specular",
-                    "roughness_map": "monkey_roughness"//,
-                    //"ambient_occlusion_map": "monkey_ambient_occlusion"
+                    "albedo_map": "player_albedo",
+                    "emissive_map": "player_emissive",
+                    "specular_map": "player_specular",
+                    "roughness_map": "player_roughness"//,
+                    //"ambient_occlusion_map": "player_ambient_occlusion"
                 },
                 "moon":{
                     "type": "lit",
@@ -162,7 +162,7 @@
                     "tint": [1, 1, 1, 1],
                     "texture": "moon",
                     "albedo_map": "moon",
-                    "roughness_map": "monkey_roughness",
+                    "roughness_map": "player_roughness",
                     "sampler": "default"
                 }
             }
@@ -199,21 +199,6 @@
                 ]
             },
             {
-                "rotation": [-45, 0, 0],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "monkey",
-                        "material": "monkey"
-                    },
-                    {
-                        "type": "Movement",
-                        "linearVelocity": [0, 0.1, 0],
-                        "angularVelocity": [0, 45, 0]
-                    }
-                ]
-            },
-            {
                 "position": [0, -1, 0],
                 "rotation": [-90, 0, 0],
                 "scale": [10, 10, 1],
@@ -224,27 +209,15 @@
                         "material": "wood"
                     }
                 ]
-            },
+            },//surrounding cube
             {
-                "position": [0, 1, 2],
+                "position": [0, 0, 0],
                 "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
+                "scale": [70, 70, 60],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 1, -2],
-                "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
+                        "mesh": "cube",
                         "material": "glass"
                     }
                 ]
@@ -257,7 +230,7 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "sphere",
-                        "material": "monkey",
+                        "material": "player",
                         "radius": 1.0,
                         "player": true
                     },
@@ -427,63 +400,10 @@
             },
             //END OF OBSTACLES ###############################
             {
-                "position": [2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [-2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 3, 0],
-                "rotation": [90, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 10, 0],
-                "rotation": [45, 45, 0],
-                "scale": [5, 5, 5],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "sphere",
-                        "material": "moon"
-                    },
-                    {
-                        "type": "Movement",
-                        "angularVelocity": [0, 90, 0]
-                    }
-                ]
-            },
-            {
                 "position": [0, 10, 0],
                 "components": [
                     {
                         "type": "Light",
-                        // "shader": "defaultLight",
                         "position": [0, 1, 5],
                         "direction": [0, -1, 0],
                         "color": [0, 0, 0.1, 1]

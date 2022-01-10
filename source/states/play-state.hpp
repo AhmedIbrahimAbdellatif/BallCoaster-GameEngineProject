@@ -9,6 +9,7 @@
 #include <systems/obstacle-collision.hpp>
 #include <asset-loader.hpp>
 #include <components/mesh-renderer.hpp>
+#include <stdlib.h>
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate: public our::State {

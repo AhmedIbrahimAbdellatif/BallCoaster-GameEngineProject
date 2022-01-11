@@ -51,15 +51,18 @@ namespace our
             Entity* playerOwnerEntity = playerEntity->getOwner();
             glm::vec3& playerPosition = playerOwnerEntity->localTransform.position;
 
+            // the game ends when the player wins (reaches finish line) or loses (collides)
             if (isEndGame(obstacleCollisionSystem, playerEntity->radius, playerPosition))
             {
                 if (obstacleCollisionSystem->isCollision(playerEntity->radius, playerPosition)) {
                     win = false;
                 }
-                stopMoving();
-                movementSystem->endGame();
+                stopMoving(); // we stop moving the ball right or left even if the user presses D or A on keyboard
+                movementSystem->endGame(); // we tell the movement system that the game has ended to stop linear movement (of camera & ball) and angluar rotation (of ball)
             }
             else {
+                // if the game hasn't ended yet, then we continuously update the
+                // position (according to the user input) and the score
                 updateScore(playerPosition);
                 
                 glm::vec3 right = getRightDirection(playerOwnerEntity);

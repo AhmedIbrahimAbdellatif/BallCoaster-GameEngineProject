@@ -36,11 +36,13 @@ namespace our {
 
         static T* getTexture(const std::string& name, glm::vec<4, glm::uint8> defaultColor = glm::vec4(255, 255, 255, 255), glm::ivec2 size = glm::ivec2( 512, 512 )) 
         {
+            // first we try to get the texture if the file is found in assets
             auto* texPtr = get(name);
             if (texPtr) {
                 return texPtr;
             }
 
+            // if texture not found, we create a texture from the default value passed
             auto* data = new glm::vec<4, glm::uint8, glm::defaultp>[size.x * size.y];
             std::fill_n(data, size.x * size.y, defaultColor);
             

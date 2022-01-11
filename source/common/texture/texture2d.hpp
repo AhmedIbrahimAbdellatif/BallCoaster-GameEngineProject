@@ -11,28 +11,22 @@ namespace our {
     public:
         // This constructor creates an OpenGL texture and saves its object name in the member variable "name" 
         Texture2D() {
-            //TODO: Complete this function
-
             // generate texture object and select active texture unit
             glGenTextures(1, &name);
-            //glActiveTexture(GL_TEXTURE0);
         };
 
         // This deconstructor deletes the underlying OpenGL texture
         ~Texture2D() { 
-            //TODO: Complete this function
             glDeleteTextures(1, &name);
         }
 
         // This method binds this texture to GL_TEXTURE_2D
         void bind() const {
-            //TODO: Complete this function
             glBindTexture(GL_TEXTURE_2D, name);
         }
 
         // This static method ensures that no texture is bound to GL_TEXTURE_2D
         static void unbind(){
-            //TODO: Complete this function
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 

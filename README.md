@@ -38,13 +38,13 @@
 
 ### Menu State:
 
-![](.\doc\menu-state.png)
+<img src=".\doc\menu-state.png">
 
 *The game starts with a menu state, just still scene. When the user presses space bar the state changes from menu state to play state*
 
 ### Play State:
 
-![](.\doc\game-state.png)
+<img src=".\doc\game-state.png">
 
 *Our game is very simple, the ball and the camera move forward in a linear movement, the player presses `D` to move right and `A` to move left and can increase the speed by pressing `Left-Shift`*
 

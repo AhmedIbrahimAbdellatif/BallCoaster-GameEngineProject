@@ -24,11 +24,31 @@
 10. Implement a lighting model and support multiple lights of different types. 
 11. Use the engine to implement a simple game.
 
+> *The aim of this project is not to focus on game design or game visuals, the main aim is to absorb the previously mentioned concepts and be able to implement them in code to create a simple game built on a game engine of our implementation*
+
 ***
 
 ## Used Technologies
 
 <img src="https://img.shields.io/badge/c++-%2300599C.svg?style=for-the-badge&logo=c%2B%2B&logoColor=white">	<img src="https://img.shields.io/badge/OpenGL-%23FFFFFF.svg?style=for-the-badge&logo=opengl">
+
+***
+
+## Game States
+
+### Menu State:
+
+![](.\doc\menu-state.png)
+
+*The game starts with a menu state, just still scene. When the user presses space bar the state changes from menu state to play state*
+
+### Play State:
+
+![](.\doc\game-state.png)
+
+*Our game is very simple, the ball and the camera move forward in a linear movement, the player presses `D` to move right and `A` to move left and can increase the speed by pressing `Left-Shift`*
+
+*For the player to win he has to dodge the obstacles until he reaches the finish line*
 
 ***
 

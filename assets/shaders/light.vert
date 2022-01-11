@@ -21,6 +21,7 @@ out Varyings {
 void main() {
    vsout.world = (object_to_world * vec4(position, 1.0f)).xyz;
    vsout.view = camera_position - vsout.world;
+   // we use the inverse specifically to adjust normal in case of non-uniform scaling. If uniform it's equivalent to using the object to world without inverse
    vsout.normal = normalize((object_to_world_inv_transpose * vec4(normal, 0.0f)).xyz);
    gl_Position = view_projection * vec4(vsout.world, 1.0);
    vsout.color = color;

@@ -26,13 +26,6 @@ namespace our
     };
 
     struct LightCommand {
-        /*int type;
-        glm::vec3 color;
-        glm::vec3 position, direction;
-        float attenuation_constant;
-        float attenuation_linear;
-        float attenuation_quadratic;
-        float inner_angle, outer_angle;*/
         glm::mat4 localToWorld;
         LightComponent* light;
     };
@@ -88,14 +81,10 @@ namespace our
             // If there is no camera, we return (we cannot render without a camera)
             if(camera == nullptr) return;
 
-            //TODO: Modify the following line such that "cameraForward" contains a vector pointing the camera forward direction
-            // HINT: See how you wrote the CameraComponent::getViewMatrix, it should help you solve this one
-            glm::vec4 cameraForwardVec4 = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, 0.0, -1.0, 0.0);
-            glm::vec3 cameraForward = glm::vec3(cameraForwardVec4.x, cameraForwardVec4.y, cameraForwardVec4.z);
+            glm::vec4 localFowardDirection(0.0, 0.0, -1.0, 0.0);
+            glm::vec3 cameraForward = glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * localFowardDirection);
 
             std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand& first, const RenderCommand& second){
-                //TODO: Finish this function
-                // HINT: the following return should return true, "first" should be drawn before "second". 
                 glm::vec4 firstCoord(glm::vec4(first.center, 1.0));
                 glm::vec4 secondCoord(glm::vec4(second.center, 1.0));
                 glm::vec4 firstSecondVec(secondCoord - firstCoord);
@@ -103,91 +92,67 @@ namespace our
                 return glm::dot(firstSecondVec, glm::vec4(cameraForward, 0)) < 0;
             });
 
-            //TODO: Get the camera ViewProjection matrix and store it in VP
+            // get the camera ViewProjection matrix
             glm::mat4 VP = camera->getProjectionMatrix(viewportSize)* camera->getViewMatrix();
 
-            //TODO: Set the OpenGL viewport using viewportStart and viewportSize
+            // set the OpenGL viewport using viewportStart and viewportSize
             glViewport(viewportStart.x, viewportStart.y, viewportSize.x, viewportSize.y);
 
-            //TODO: Set the clear color to black and the clear depth to 1
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            glClearDepth(1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // black
+            glClearDepth(1.0f); // depth = 1
 
-            //TODO: Set the color mask to true and the depth mask to true (to ensure the glClear will affect the framebuffer)
+            // set the color mask to true and the depth mask to true (to ensure the glClear will affect the framebuffer)
             glColorMask(true, true, true, true);
             glDepthMask(true);
 
-            //TODO: Clear the color and depth buffers
+            // clear the color and depth buffers
             glClear(GL_COLOR_BUFFER_BIT);
             glClear(GL_DEPTH_BUFFER_BIT);
 
-            //TODO: Draw all the opaque commands followed by all the transparent commands
-            // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
+            // opaque commands should be drawn before transparent ones (order is important)
             drawCommands(opaqueCommands, VP, camera, lightCommands);
             drawCommands(transparentCommands, VP, camera, lightCommands);
-            // addLights(lightCommands, VP, camera);
         }
 
-        void drawCommands(std::vector<RenderCommand>& commands, glm::mat4& VP, CameraComponent*& camera, std::vector<LightCommand>& lightCommands)
+        void drawCommands(std::vector<RenderCommand>& renderCommands, glm::mat4& VP, CameraComponent*& camera, std::vector<LightCommand>& lightCommands)
         {
-            for (auto command : commands)
+            for (auto renderCommand : renderCommands)
             {
-                glm::mat4 MVP(VP * command.localToWorld);
-                command.material->setup();
-                //command.material->shader->set("transform", MVP);
-                command.material->shader->set("object_to_world", command.localToWorld);
-                command.material->shader->set("view_projection", VP);
-                glm::vec4 eye(0.0, 0.0, 0.0, 1.0);
-                glm::vec3 cameraPosition = glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * eye);
-                command.material->shader->set("camera_position", cameraPosition);
-                command.material->shader->set("object_to_world_inv_transpose", glm::inverse(command.localToWorld), TRANSPOSE);
-                int i = 0;
-                for (auto lightCommand : lightCommands)
-                {
-                    command.material->setup();
-                    // std::string test = std::to_string(i);
-
-                    command.material->shader->set("lights[" + std::to_string(i) + "].type", static_cast<int>(lightCommand.light->lightType));
-                    command.material->shader->set("lights[" + std::to_string(i) + "].color", lightCommand.light->color);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].position", lightCommand.light->position);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].direction", glm::normalize(lightCommand.light->direction));
-                    command.material->shader->set("lights[" + std::to_string(i) + "].attenuation_constant", lightCommand.light->attenuation.x);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].attenuation_linear", lightCommand.light->attenuation.y);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].attenuation_quadratic", lightCommand.light->attenuation.z);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].inner_angle", lightCommand.light->coneAngles.x);
-                    command.material->shader->set("lights[" + std::to_string(i) + "].outer_angle", lightCommand.light->coneAngles.y);
-                    i++;
-                }
-                command.material->shader->set("light_count", i);
-                command.mesh->draw();
-            }
-        };
-
-        void addLights(std::vector<LightCommand>& commands, glm::mat4& VP, CameraComponent*& camera) {
-            int i = 0;
-            for (auto command : commands)
-            {
-                /*command.light->setup();
-                command.light->shader->set("lights[" + std::to_string(i) + "].type", static_cast<int>(command.light->lightType));
-                command.light->shader->set("lights[" + std::to_string(i) + "].diffuse", command.light->diffuse);
-                command.light->shader->set("lights[" + std::to_string(i) + "].specular", command.light->specular);
-                command.light->shader->set("lights[" + std::to_string(i) + "].ambient", command.light->ambient);
-                command.light->shader->set("lights[" + std::to_string(i) + "].position", command.light->position);
-                command.light->shader->set("lights[" + std::to_string(i) + "].direction", command.light->direction);
-                command.light->shader->set("lights[" + std::to_string(i) + "].attenuation_constant", command.light->attenuation.x);
-                command.light->shader->set("lights[" + std::to_string(i) + "].attenuation_linear", command.light->attenuation.y);
-                command.light->shader->set("lights[" + std::to_string(i) + "].attenuation_quadratic", command.light->attenuation.z);
-                command.light->shader->set("lights[" + std::to_string(i) + "].inner_angle", command.light->coneAngles.x);
-                command.light->shader->set("lights[" + std::to_string(i) + "].outer_angle", command.light->coneAngles.y);
-                command.light->shader->set("object_to_world", command.localToWorld);
-                command.light->shader->set("view_projection", VP);
-                glm::vec4 eye(0.0, 0.0, 0.0, 1.0);
-                glm::vec3 cameraPosition = glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * eye);
-                command.light->shader->set("camera_position", cameraPosition);
-                command.light->shader->set("object_to_world_inv_transpose", glm::inverse(command.localToWorld), TRANSPOSE);
-                i++;*/
+                renderCommand.material->setup();
+                setVertexShaderUniforms(renderCommand, VP, camera);
+                setFragmentShaderUniforms(lightCommands, renderCommand);
+                renderCommand.mesh->draw();
             }
         }
+        void setVertexShaderUniforms(our::RenderCommand& renderCommand, glm::mat4& VP, our::CameraComponent*& camera)
+        {
+            renderCommand.material->shader->set("object_to_world", renderCommand.localToWorld);
+            renderCommand.material->shader->set("view_projection", VP);
+            glm::vec4 eye(0.0, 0.0, 0.0, 1.0);
+            glm::vec3 cameraPosition = glm::vec3(camera->getOwner()->getLocalToWorldMatrix() * eye);
+            renderCommand.material->shader->set("camera_position", cameraPosition);
+            renderCommand.material->shader->set("object_to_world_inv_transpose", glm::inverse(renderCommand.localToWorld), TRANSPOSE);
+        }
+        void setFragmentShaderUniforms(std::vector<our::LightCommand>& lightCommands, our::RenderCommand& renderCommand)
+        {
+            // we use single pass forward ligting, that's why we pass all lights in a single array to fragment shader
+            int i = 0;
+            for (auto lightCommand : lightCommands)
+            {
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].type", static_cast<int>(lightCommand.light->lightType));
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].color", lightCommand.light->color);
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].position", lightCommand.light->position);
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].direction", glm::normalize(lightCommand.light->direction));
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].attenuation_constant", lightCommand.light->attenuation.x);
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].attenuation_linear", lightCommand.light->attenuation.y);
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].attenuation_quadratic", lightCommand.light->attenuation.z);
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].inner_angle", lightCommand.light->coneAngles.x);
+                renderCommand.material->shader->set("lights[" + std::to_string(i) + "].outer_angle", lightCommand.light->coneAngles.y);
+                i++;
+            }
+            renderCommand.material->shader->set("light_count", i);
+        }
+        ;
 
     };
 

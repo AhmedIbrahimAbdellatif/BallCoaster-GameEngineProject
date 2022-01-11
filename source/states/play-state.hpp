@@ -30,17 +30,23 @@ class Playstate: public our::State {
         // If we have a world in the scene config, we use it to populate our world
         if(config.contains("world")){
             world.deserialize(config["world"]);
-            for(auto entity : world.getEntities()){
-                our::MeshRendererComponent* mesh = entity->getComponent<our::MeshRendererComponent>();
-                if(mesh != nullptr && mesh->isObstacle()) {
-                    float obstacleRadius = mesh->radius;
-                    glm::vec3 obstaclePosition = mesh->fixedPosition;
-                    obstacleCollisionSystem.addObstacle(obstacleRadius, obstaclePosition);
-                }
-            }
+            storeObstacles();
         }
         // We initialize the camera controller system since it needs a pointer to the app
         playerController.enter(getApp());
+    }
+
+    void storeObstacles()
+    {
+        for (auto entity : world.getEntities()) {
+            our::MeshRendererComponent* obstacle = entity->getComponent<our::MeshRendererComponent>();
+            if (obstacle != nullptr && obstacle->isObstacle()) {
+                // store obstacle position and dimensions to be able to detect collision
+                float obstacleRadius = obstacle->radius;
+                glm::vec3 obstaclePosition = obstacle->fixedPosition;
+                obstacleCollisionSystem.addObstacle(obstacleRadius, obstaclePosition);
+            }
+        }
     }
 
     void onDraw(double deltaTime) override {
@@ -49,41 +55,52 @@ class Playstate: public our::State {
         bool stopPlaying = playerController.update(&world, (float)deltaTime, &obstacleCollisionSystem, &movementSystem);
         auto& config = getApp()->getConfig()["scene"];
         if (stopPlaying) {
-            if (playerController.isWin()) {
-                // announce winning
-                if(config.contains("win")){
-                    world.deserialize(config["win"]);
-                }
-            }
-            else {
-                // announce losing
-                if(config.contains("lose")){
-                    world.deserialize(config["lose"]);
-                }
-            }
+            announceWinOrLose(config);
         }
         int score = playerController.getScore();
-        if(score == 0){
-            if(config.contains("zero")){ world.deserialize(config["zero"]);}
-        }
-        else if(score == 1){
-            if(config.contains("one")){ world.deserialize(config["one"]);}
-        }
-        else if(score == 2){
-            if(config.contains("two")){ world.deserialize(config["two"]);}
-        }
-        else if(score == 3){
-            if(config.contains("three")){ world.deserialize(config["three"]);}
-        }
-        else if(score == 4){
-            if(config.contains("four")){ world.deserialize(config["four"]);}
-        }
-        else if(score == 5){
-            if(config.contains("five")){ world.deserialize(config["five"]);}
-        }
+        displayScore(score, config);
+
         // And finally we use the renderer system to draw the scene
         auto size = getApp()->getFrameBufferSize();
         renderer.render(&world, glm::ivec2(0, 0), size);
+    }
+
+    void announceWinOrLose(const nlohmann::json& config)
+    {
+        if (playerController.isWin()) {
+            // announce winning
+            if (config.contains("win")) {
+                world.deserialize(config["win"]);
+            }
+        }
+        else {
+            // announce losing
+            if (config.contains("lose")) {
+                world.deserialize(config["lose"]);
+            }
+        }
+    }
+
+    void displayScore(int score, const nlohmann::json& config)
+    {
+        if (score == 0) {
+            if (config.contains("zero")) { world.deserialize(config["zero"]); }
+        }
+        else if (score == 1) {
+            if (config.contains("one")) { world.deserialize(config["one"]); }
+        }
+        else if (score == 2) {
+            if (config.contains("two")) { world.deserialize(config["two"]); }
+        }
+        else if (score == 3) {
+            if (config.contains("three")) { world.deserialize(config["three"]); }
+        }
+        else if (score == 4) {
+            if (config.contains("four")) { world.deserialize(config["four"]); }
+        }
+        else if (score == 5) {
+            if (config.contains("five")) { world.deserialize(config["five"]); }
+        }
     }
 
     void onDestroy() override {

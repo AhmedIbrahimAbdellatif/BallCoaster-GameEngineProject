@@ -317,7 +317,7 @@
                         "linearVelocity": [0, 0, -4]
                     },
                     {
-                        "type": "Free Camera Controller"
+                        "type": "Free Player Controller"
                     }
                 ],
                 "children": [
@@ -389,7 +389,7 @@
                         "angularVelocity": [-90, 0, 0]
                     },
                     {
-                        "type": "Free Camera Controller"
+                        "type": "Free Player Controller"
                     }
                 ]
             },
@@ -589,7 +589,7 @@
                         "linearVelocity": [0, 0, -4]
                     },
                     {
-                        "type": "Free Camera Controller"
+                        "type": "Free Player Controller"
                     }
                 ],
                 "children": [

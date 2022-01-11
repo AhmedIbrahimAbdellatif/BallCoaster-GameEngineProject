@@ -3,7 +3,7 @@
 #include "../ecs/entity.hpp"
 #include "camera.hpp"
 #include "mesh-renderer.hpp"
-#include "free-camera-controller.hpp"
+#include "free-player-controller.hpp"
 #include "movement.hpp"
 #include "light.hpp"
 
@@ -18,8 +18,8 @@ namespace our {
             component = entity->addComponent<CameraComponent>();
         } else if (type == MeshRendererComponent::getID()) {
             component = entity->addComponent<MeshRendererComponent>();
-        } else if (type == FreeCameraControllerComponent::getID()) {
-            component = entity->addComponent<FreeCameraControllerComponent>();
+        } else if (type == FreePlayerControllerComponent::getID()) {
+            component = entity->addComponent<FreePlayerControllerComponent>();
         } else if (type == MovementComponent::getID()) {
             component = entity->addComponent<MovementComponent>();
         } else if (type == LightComponent::getID()) {

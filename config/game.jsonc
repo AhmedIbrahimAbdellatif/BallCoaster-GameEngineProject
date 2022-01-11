@@ -24,14 +24,6 @@
                 "light": {
                   "vs": "assets/shaders/light.vert",
                   "fs": "assets/shaders/textured-light.frag"
-                },
-                "defaultLight": {
-                    "vs": "assets/shaders/light.vert",
-                    "fs": "assets/shaders/light.frag"
-                  },
-                "sky": {
-                "vs": "assets/shaders/sky_transform.vert",
-                "fs": "assets/shaders/sky.frag"
                 }
             },
             "textures":{
@@ -59,7 +51,6 @@
                 "monkey": "assets/models/monkey.obj",
                 "plane": "assets/models/plane.obj",
                 "ground": "assets/models/ground.obj",
-                "wall": "assets/models/wall.obj",
                 "sphere": "assets/models/sphere.obj"
             },
             "samplers":{

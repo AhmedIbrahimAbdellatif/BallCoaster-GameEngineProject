@@ -59,33 +59,33 @@ Material sample_material(TexturedMaterial tex_mat, vec2 tex_coord){
    mat.emissive = tex_mat.emissive_tint * texture(tex_mat.emissive_map, tex_coord).rgb;
    mat.ambient = mat.diffuse * texture(tex_mat.ambient_occlusion_map, tex_coord).r;
    float roughness = mix(tex_mat.roughness_range.x, tex_mat.roughness_range.y,
-       texture(tex_mat.roughness_map, tex_coord).r);
-   mat.shininess = 2.0f/pow(clamp(roughness, 0.001f, 0.999f), 4.0f) - 2.0f;
+       texture(tex_mat.roughness_map, tex_coord).r); // if 0 -> x and 1 -> y else we get a value from within the range 
+   mat.shininess = 2.0f/pow(clamp(roughness, 0.001f, 0.999f), 4.0f) - 2.0f; // claping is to avoid having shinnines of 0 or infinity
    return mat;
 }
 
 float attenuationOfOtherLightTypes(vec3 light_direction, Light light) {
-    float distance = length(light_direction);
-    light_direction /= distance;
+    float distance = length(light_direction); // get the length of the direction vector
+    light_direction /= distance; // normalize
     float attenuation = 1.0f / (light.attenuation_constant +
                 light.attenuation_linear * distance +
-                light.attenuation_quadratic * distance * distance);
+                light.attenuation_quadratic * distance * distance); // realistically 1/d^2 but we use linear and quadratic constants for better results
     if(light.type == TYPE_SPOT){
-        float angle = acos(dot(light.direction, light_direction));
-        attenuation *= smoothstep(light.outer_angle, light.inner_angle, angle);
+        float angle = acos(dot(light.direction, light_direction)); // get the angle with the light
+        attenuation *= smoothstep(light.outer_angle, light.inner_angle, angle); // attenuate smoothly between the angles
     }
     return attenuation;
 }
 
 vec3 calculateDiffuse(vec3 sampled_diffuse, vec3 normal, vec3 light_direction, vec3 light_color) {
-    float lambert = max(0.0f, dot(normal, -light_direction));
+    float lambert = max(0.0f, dot(normal, -light_direction)); // as the angle increases between light direction and normal, the diffuse decreases
     return sampled_diffuse * light_color * lambert;
 }
 
 vec3 calculateSpecular(vec3 normal, vec3 light_direction, vec3 view, float sampled_shininess, 
                        vec3 sampled_specular, vec3 light_color) {
     vec3 reflected = reflect(light_direction, normal);
-    float phong = pow(max(0.0f, dot(view, reflected)), sampled_shininess);
+    float phong = pow(max(0.0f, dot(view, reflected)), sampled_shininess); // as the angle increases between the vector towards our human eye and the reflected light direction, the specular decreases
     return sampled_specular * light_color * phong;
 }
 

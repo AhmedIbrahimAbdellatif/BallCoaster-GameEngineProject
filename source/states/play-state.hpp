@@ -16,7 +16,7 @@ class Playstate: public our::State {
 
     our::World world;
     our::ForwardRenderer renderer;
-    our::FreeCameraControllerSystem cameraController;
+    our::PlayerControllerSystem playerController;
     our::MovementSystem movementSystem;
     our::ObstacleCollisionSystem obstacleCollisionSystem;
 
@@ -40,16 +40,16 @@ class Playstate: public our::State {
             }
         }
         // We initialize the camera controller system since it needs a pointer to the app
-        cameraController.enter(getApp());
+        playerController.enter(getApp());
     }
 
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
-        bool stopPlaying = cameraController.update(&world, (float)deltaTime, &obstacleCollisionSystem, &movementSystem);
+        bool stopPlaying = playerController.update(&world, (float)deltaTime, &obstacleCollisionSystem, &movementSystem);
         auto& config = getApp()->getConfig()["scene"];
         if (stopPlaying) {
-            if (cameraController.isWin()) {
+            if (playerController.isWin()) {
                 // announce winning
                 if(config.contains("win")){
                     world.deserialize(config["win"]);
@@ -62,7 +62,7 @@ class Playstate: public our::State {
                 }
             }
         }
-        int score = cameraController.getScore();
+        int score = playerController.getScore();
         if(score == 0){
             if(config.contains("zero")){ world.deserialize(config["zero"]);}
         }
@@ -87,8 +87,6 @@ class Playstate: public our::State {
     }
 
     void onDestroy() override {
-        // On exit, we call exit for the camera controller system to make sure that the mouse is unlocked
-        cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
     }

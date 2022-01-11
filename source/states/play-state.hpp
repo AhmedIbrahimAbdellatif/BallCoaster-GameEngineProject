@@ -32,7 +32,7 @@ class Playstate: public our::State {
             world.deserialize(config["world"]);
             storeObstacles();
         }
-        // We initialize the camera controller system since it needs a pointer to the app
+        // We initialize the player controller system since it needs a pointer to the app
         playerController.enter(getApp());
     }
 

@@ -24,7 +24,7 @@
 10. Implement a lighting model and support multiple lights of different types. 
 11. Use the engine to implement a simple game.
 
-> *The aim of this project is not to focus on game design or game visuals, the main aim is to absorb the previously mentioned concepts and be able to create a simple game built on a game engine of our implementation*
+> *The aim of this project is not to focus on game design or game visuals, the main aim is to absorb the previously mentioned concepts and create a simple game built on a game engine of our implementation*
 
 ***
 

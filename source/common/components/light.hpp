@@ -16,7 +16,6 @@ namespace our {
 
     class LightComponent : public Component {
     public:
-        //ShaderProgram* shader;
         LightType lightType;
         glm::vec3 position = { 0, 0, 0 };
         glm::vec3 direction = { 0, -1, 0 };
@@ -27,10 +26,8 @@ namespace our {
         glm::vec3 specular = { 0, 0, 0 };
         glm::vec2 coneAngles = { 0, 0 };
 
-        // The ID of this component type is "Light"
         static std::string getID() { return "Light"; }
 
-        void setup();
         void deserialize(const nlohmann::json& data) override;
     };
 

@@ -29,23 +29,24 @@ class MenuState: public our::State {
         // If we have a world in the scene config, we use it to populate our world
         if(config.contains("menu")){
             world.deserialize(config["menu"]);
-            for(auto entity : world.getEntities()){
-                our::MeshRendererComponent* mesh = entity->getComponent<our::MeshRendererComponent>();
-            }
         }
-        // We initialize the camera controller system since it needs a pointer to the app
-        /*cameraController.enter(getApp());*/
     }
 
     void onDraw(double deltaTime) override {
-        // And finally we use the renderer system to draw the scene
+        // check if the user pressed space bar, start game
         if (getApp()->getKeyboard().isPressed(GLFW_KEY_SPACE)) {
-            auto app_config = getApp()->getConfig();
-            std::string gameState = app_config["game-scene"].get<std::string>();
-            getApp()->changeState(gameState);
+            goToPlayState();
         }
+        // And finally we use the renderer system to draw the scene
         auto size = getApp()->getFrameBufferSize();
         renderer.render(&world, glm::ivec2(0, 0), size);
+    }
+
+    void goToPlayState()
+    {
+        auto app_config = getApp()->getConfig();
+        std::string gameState = app_config["game-scene"].get<std::string>();
+        getApp()->changeState(gameState);
     }
 
     void onDestroy() override {

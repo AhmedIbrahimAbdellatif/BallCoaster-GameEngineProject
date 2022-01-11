@@ -6,12 +6,8 @@
 
 namespace our {
     // This function computes and returns a matrix that represents this transform
-    // Remember that the order of transformations is: Scaling, Rotation then Translation
-    // HINT: to convert euler angles to a rotation matrix, you can use glm::yawPitchRoll
-
     glm::mat4 Transform::toMat4() const {
-        //TODO: Write this function
-        // prepare each transformation matrix
+        // prepare transformation matrices for translation, rotation, scaling
         glm::highp_mat4 translation(glm::translate(glm::mat4(1.0f), position));
         glm::highp_mat4 rotation(glm::yawPitchRoll(rotation.y, rotation.x, rotation.z));
         glm::highp_mat4 scaling(glm::scale(glm::mat4(1.0f), scale));
@@ -20,7 +16,7 @@ namespace our {
         return  translation * rotation * scaling;
     }
 
-     // Deserializes the entity data and components from a json object
+    // Deserializes the entity data and components from a json object
     void Transform::deserialize(const nlohmann::json& data){
         position = data.value("position", position);
         rotation = glm::radians(data.value("rotation", glm::degrees(rotation)));

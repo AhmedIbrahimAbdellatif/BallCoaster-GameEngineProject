@@ -14,7 +14,6 @@ namespace our {
 
     // This function should setup the pipeline state and set the shader to be used
     void Material::setup() const {
-        //TODO: Write this function
         pipelineState.setup();
         shader->use();
     }
@@ -33,7 +32,6 @@ namespace our {
     // This function should call the setup of its parent and
     // set the "tint" uniform to the value in the member variable tint 
     void TintedMaterial::setup() const {
-        //TODO: Write this function
         Material::setup(); // tinted material is the child of material class
         shader->set("tint", tint);
     }
@@ -49,7 +47,6 @@ namespace our {
     // set the "alphaThreshold" uniform to the value in the member variable alphaThreshold
     // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex" 
     void TexturedMaterial::setup() const {
-        //TODO: Write this function
         TintedMaterial::setup(); // textured material is the child of tinted material class
         shader->set("alphaThreshold", alphaThreshold);
         glActiveTexture(GL_TEXTURE0);
@@ -75,7 +72,9 @@ namespace our {
         shader->set("material.specular_tint", specular_tint);
         shader->set("material.roughness_range", roughness_range);
         shader->set("material.emissive_tint", emissive_tint);
-
+        
+        // each map has a different texture unit
+        // bind each texture map, bind the sampler to its unit, and pass the texture unit reference to the frag shader
         glActiveTexture(GL_TEXTURE1);
         albedo_map->bind();
         sampler->bind(TEXTURE_UNIT_1);
@@ -108,6 +107,7 @@ namespace our {
         
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
 
+        // load texture maps and always give a default value for each of them in case not found in json file
         std::string test = data.value("albedo_map", "white");
         albedo_map = AssetLoader<Texture2D>::getTexture(data.value("albedo_map", "white"), glm::vec4(255, 255, 255, 255));
         albedo_tint = data.value<glm::vec3>("albedo_tint", { 1.0f, 1.0f, 1.0f });

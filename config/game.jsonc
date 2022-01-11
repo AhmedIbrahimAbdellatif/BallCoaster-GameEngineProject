@@ -570,6 +570,11 @@
                     }
                 ]
             }
+            //NOTE: in our game design we assume light type to be directional only (you can add up to 16 directional light)
+            // but we added the implementation of other lights in code to show that we know how to implement it (but other types of
+            // light are not tested due to short time and having other project deadlines)
+            // the implementation and function calls of other light types (spot and point types) are commented inside textured-light.frag 
+            // and these called functions are implemented above in the file textured-light.frag before the main()
         ],
         "menu":[
             {

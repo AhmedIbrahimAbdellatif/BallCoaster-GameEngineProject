@@ -76,10 +76,6 @@ namespace our {
         shader->set("material.roughness_range", roughness_range);
         shader->set("material.emissive_tint", emissive_tint);
 
-        shader->set("sky_light.top_color", {0.5, 0.5, 1});
-        shader->set("sky_light.middle_color", { 1, 1, 1});
-        shader->set("sky_light.bottom_color", { 0.5, 1, 0.5 });
-
         glActiveTexture(GL_TEXTURE1);
         albedo_map->bind();
         sampler->bind(TEXTURE_UNIT_1);

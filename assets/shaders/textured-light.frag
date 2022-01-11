@@ -63,6 +63,31 @@ Material sample_material(TexturedMaterial tex_mat, vec2 tex_coord){
    return mat;
 }
 
+float attenuationOfOtherLightTypes(vec3 light_direction, Light light) {
+    float distance = length(light_direction);
+    light_direction /= distance;
+    float attenuation = 1.0f / (light.attenuation_constant +
+                light.attenuation_linear * distance +
+                light.attenuation_quadratic * distance * distance);
+    if(light.type == TYPE_SPOT){
+        float angle = acos(dot(light.direction, light_direction));
+        attenuation *= smoothstep(light.outer_angle, light.inner_angle, angle);
+    }
+    return attenuation;
+}
+
+vec3 calculateDiffuse(vec3 sampled_diffuse, vec3 normal, vec3 light_direction, vec3 light_color) {
+    float lambert = max(0.0f, dot(normal, -light_direction));
+    return sampled_diffuse * light_color * lambert;
+}
+
+vec3 calculateSpecular(vec3 normal, vec3 light_direction, vec3 view, float sampled_shininess, 
+                       vec3 sampled_specular, vec3 light_color) {
+    vec3 reflected = reflect(light_direction, normal);
+    float phong = pow(max(0.0f, dot(view, reflected)), sampled_shininess);
+    return sampled_specular * light_color * phong;
+}
+
 void main() {
     Material sampled = sample_material(material, fsin.tex_coord);
     vec3 normal = normalize(fsin.normal);
@@ -87,24 +112,17 @@ void main() {
             light_direction = light.direction;
         }
         else {
-             light_direction = fsin.world - light.position;
-             float distance = length(light_direction);
-             light_direction /= distance;
-             attenuation *= 1.0f / (light.attenuation_constant +
-                            light.attenuation_linear * distance +
-                            light.attenuation_quadratic * distance * distance);
-             if(light.type == TYPE_SPOT){
-                float angle = acos(dot(light.direction, light_direction));
-                attenuation *= smoothstep(light.outer_angle, light.inner_angle, angle);
-             }
+            //NOTE: in our game design we assume light type to be directional only (you can add up to 16 directional light)
+            // but we added the implementation of other lights in code to show that we know how to implement it (but other types of
+            // light are not tested due to short time and having other project deadlines)
+            // the implementation is commented below and these called functions are implemented above in this file before the main()
+            
+            //light_direction = fsin.world - light.position;
+            //attenuation = attenuationOfOtherLightTypes(light_direction, light);
         }
         
-        float lambert = max(0.0f, dot(normal, -light_direction));
-        vec3 diffuse = sampled.diffuse * light.color * lambert;
-
-        vec3 reflected = reflect(light_direction, normal);
-        float phong = pow(max(0.0f, dot(view, reflected)), sampled.shininess);
-        vec3 specular = sampled.specular * light.color * phong;
+        vec3 diffuse = calculateDiffuse(sampled.diffuse, normal, light_direction, light.color);
+        vec3 specular = calculateSpecular(normal, light_direction, view, sampled.shininess, sampled.specular, light.color);
         
         accumulated_light += (diffuse + specular) * attenuation;
     }

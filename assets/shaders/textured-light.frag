@@ -23,7 +23,6 @@ struct Light {
     float inner_angle, outer_angle;
 };
 
-
 struct TexturedMaterial {
    sampler2D albedo_map;
    vec3 albedo_tint;
@@ -48,6 +47,8 @@ struct Material {
 uniform TexturedMaterial material;
 uniform int light_count = 1;
 uniform Light lights[MAX_LIGHT_COUNT];
+
+vec3 ambientLightConfig = vec3(0.8194, 0.9294, 0.949); //Light blue ambient
 
 out vec4 frag_color;
 
@@ -94,7 +95,7 @@ void main() {
     vec3 view = normalize(fsin.view);
 
     // simulating light reflections
-    vec3 ambient = sampled.ambient;
+    vec3 ambient = sampled.ambient * ambientLightConfig;
     
     // effect of light reflections and material emission
     vec3 accumulated_light = sampled.emissive + ambient;
@@ -127,5 +128,6 @@ void main() {
         accumulated_light += (diffuse + specular) * attenuation;
     }
 
+    // add the effect of the accumulated_light to the fragment color, while retaining the original alpha value
     frag_color = fsin.color * vec4(accumulated_light, texture(material.albedo_map, fsin.tex_coord).a);
 }

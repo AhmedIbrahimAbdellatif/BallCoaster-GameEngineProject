@@ -52,3 +52,12 @@
 
 ***
 
+## How to Run
+
+```powershell
+1. Build the code
+2. Run the following command: ./bin/GAME_APPLICATION.exe -c='config\game.jsonc'
+```
+
+***
+

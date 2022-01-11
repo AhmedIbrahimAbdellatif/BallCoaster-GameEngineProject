@@ -19,13 +19,8 @@
 
 namespace our
 {
-
-    // The free camera controller system is responsible for moving every entity which contains a FreePlayerControllerComponent.
-    // This system is added as a slightly complex example for how use the ECS framework to implement logic. 
-    // For more information, see "common/components/free-player-controller.hpp"
     class PlayerControllerSystem {
         Application* app; // The application in which the state runs
-        bool mouse_locked = false; // Is the mouse locked
         int score = 0;
     
     private:
@@ -36,15 +31,15 @@ namespace our
         bool win = true;
     public:
         // When a state enters, it should call this function and give it the pointer to the application
-        void enter(Application* app){
+        void enter(Application* app) {
             this->app = app;
         }
 
-        int getScore(){
+        int getScore() {
             return score;
         }
 
-        // This should be called every frame to update all entities containing a FreePlayerControllerComponent 
+        // This should be called every frame to update the player entity 
         bool update(World* world, float deltaTime, our::ObstacleCollisionSystem* obstacleCollisionSystem, 
                     our::MovementSystem* movementSystem) {
 

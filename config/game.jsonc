@@ -315,9 +315,6 @@
                     {
                         "type": "Movement",
                         "linearVelocity": [0, 0, -4]
-                    },
-                    {
-                        "type": "Free Player Controller"
                     }
                 ],
                 "children": [
@@ -583,13 +580,6 @@
                 "components": [
                     {
                         "type": "Camera"
-                    },
-                    {
-                        "type": "Movement",
-                        "linearVelocity": [0, 0, -4]
-                    },
-                    {
-                        "type": "Free Player Controller"
                     }
                 ],
                 "children": [
